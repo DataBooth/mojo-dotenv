@@ -237,7 +237,7 @@ pixi run example-simple
 
 ## Contributing
 
-Contributions welcome! This is an open-source project (Apache 2.0).
+Contributions welcome! This is an open-source project (MIT License).
 
 ### Ways to Contribute
 - Report bugs or request features
@@ -245,6 +245,14 @@ Contributions welcome! This is an open-source project (Apache 2.0).
 - Add test cases
 - Implement features
 - Review code
+
+## Sponsorship
+
+This project is sponsored by **[DataBooth](https://www.databooth.com.au)** — Data analytics consulting for medium-sized businesses.
+
+DataBooth transforms raw data into actionable strategies that drive growth, reduce costs, and manage emerging risks. Bringing risk expertise refined through quantitative finance, regulatory roles (APRA/ASIC), and hands-on AI development to help organisations make informed, data-driven decisions.
+
+*Need help with data analytics, risk management, or evaluating Mojo for your infrastructure? [Let's talk](https://www.databooth.com.au/about/).*
 
 ## Acknowledgments
 
@@ -258,7 +266,7 @@ See **[CREDITS.md](CREDITS.md)** for detailed acknowledgments and project histor
 
 ## License
 
-Apache License 2.0 - See [LICENSE](LICENSE) for details.
+MIT License - See [LICENSE](LICENSE) for details.
 
 ## Links
 
