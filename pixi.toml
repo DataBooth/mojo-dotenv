@@ -1,0 +1,25 @@
+[workspace]
+authors = ["Michael Booth <michael@databooth.com.au>"]
+channels = ["conda-forge", "https://conda.modular.com/max-nightly"]
+name = "mojo-dotenv"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[tasks]
+# Development tasks
+mojo-version = "mojo --version"
+test = "mojo tests/test_basic.mojo"
+test-all = "mojo tests/*.mojo"
+
+# Build tasks
+build = "mojo package src/dotenv -o dotenv.mojopkg"
+
+# Example tasks
+example-simple = "mojo examples/simple.mojo"
+
+# Validation tasks
+check-mojoenv = "cd ../mojoenv && mojo main.mojo"
+
+[dependencies]
+mojo = ">=0.26.1.0.dev2026010405,<0.27"
+python-dotenv = ">=1.2.1,<2"

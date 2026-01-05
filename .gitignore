@@ -29,7 +29,10 @@ wheels/
 
 # Pixi / Conda
 .pixi/
-*.lock
+# Keep pixi.lock for reproducibility, ignore others
+package-lock.json
+yarn.lock
+poetry.lock
 
 # IDEs
 .vscode/
@@ -55,3 +58,6 @@ htmlcov/
 *.a
 *.dylib
 *.dll
+# pixi environments
+.pixi/*
+!.pixi/config.toml
