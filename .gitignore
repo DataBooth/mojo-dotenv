@@ -1,0 +1,57 @@
+# Mojo
+*.mojopkg
+__pycache__/
+.mojo_cache/
+
+# Python
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Pixi / Conda
+.pixi/
+*.lock
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# Environment files (for testing, don't commit real secrets!)
+.env
+.env.local
+.env.*.local
+
+# Build artifacts
+*.o
+*.a
+*.dylib
+*.dll
