@@ -273,9 +273,3 @@ MIT License - See [LICENSE](LICENSE) for details.
 - [GitHub Repository](https://github.com/databooth/mojo-dotenv)
 - [Project Plan](PLAN.md)
 - [Mojo Documentation](https://docs.modular.com/mojo/)
-- [Modular Discord](https://discord.gg/modular)
-
----
-
-**Status:** Phase 1 & 2 Complete ✅  
-**Next:** Phase 3 - Advanced features (variable expansion, multiline values, escape sequences)

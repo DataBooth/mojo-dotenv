@@ -4,21 +4,21 @@
 
 ### Category: Community Showcase
 
-**Title**: mojo-dotenv - Load .env files in Mojo (python-dotenv compatible)
+**Title**: mojo-dotenv v0.2.0 - Load .env files in Mojo (98%+ python-dotenv compatible)
 
 **Post**:
 
 ```markdown
 # mojo-dotenv 🔥
 
-I'm excited to share **mojo-dotenv** - a modern `.env` file parser and loader for Mojo!
+I'm excited to share **mojo-dotenv v0.2.0** - a modern `.env` file parser and loader for Mojo!
 
 ## What is it?
 
 Load environment variables from `.env` files into your Mojo applications, following the [12-factor app](https://12factor.net/config) methodology.
 
 ```mojo
-from dotenv import load_dotenv, dotenv_values
+from dotenv import load_dotenv, dotenv_values, find_dotenv
 from os import getenv
 
 fn main() raises:
@@ -29,15 +29,23 @@ fn main() raises:
     # Option 2: Parse to Dict
     var config = dotenv_values(".env")
     print(config["API_KEY"])
+    
+    # Option 3: Auto-discover .env file
+    var env_path = find_dotenv()
+    _ = load_dotenv(env_path)
 ```
 
 ## Features
 
 ✅ **Parse .env files** - `dotenv_values()` returns `Dict[String, String]`  
 ✅ **Load into environment** - `load_dotenv()` sets environment variables  
-✅ **95%+ python-dotenv compatible** - Validated with Python interop tests  
-✅ **Modern Mojo** - Built for Mojo 0.26.x with latest syntax  
-✅ **Comprehensive tests** - Basic, compatibility, and integration tests  
+✅ **Variable expansion** - `${VAR}` and `$VAR` syntax supported  
+✅ **Multiline values** - Quoted strings can span multiple lines  
+✅ **Escape sequences** - `\n`, `\t`, `\"`, `\\`, `\'` in quoted strings  
+✅ **Auto-discovery** - `find_dotenv()` searches parent directories  
+✅ **98%+ python-dotenv compatible** - Validated with comprehensive test suite  
+✅ **Modern Mojo** - Built for Mojo 2025/2026 with latest syntax  
+✅ **42 comprehensive tests** - Using Mojo's TestSuite framework  
 ✅ **Multiple installation methods** - Git submodule, source copy, or .mojopkg
 
 ## Why?
@@ -56,10 +64,10 @@ This project builds on:
 
 ## Status
 
-**Phase 1 & 2 Complete** ✅ - MVP functional and production-ready
+**Production-ready** ✅ - Near-100% python-dotenv compatibility with advanced features
 
 **Repository**: https://github.com/databooth/mojo-dotenv  
-**License**: Apache 2.0
+**License**: MIT License
 
 ## Installation
 
@@ -73,11 +81,10 @@ See [distribution guide](https://github.com/databooth/mojo-dotenv/blob/main/docs
 
 ## What's Next?
 
-Phase 3 planned features:
-- Variable expansion (`${VAR}`)
-- Multiline values
-- Escape sequences
-- Inline comments
+Future enhancements:
+- Multiple .env files with precedence
+- Stream input support
+- Custom encoding options
 
 ## Feedback Welcome!
 
@@ -98,19 +105,21 @@ Let me know if you use it in your projects! 🚀
 **Short announcement:**
 
 ```
-🔥 **mojo-dotenv** - Load .env files in Mojo!
+🔥 **mojo-dotenv v0.2.0** - Load .env files in Mojo!
 
-Just released v0.1.0 - a modern .env parser/loader for Mojo, 95%+ compatible with python-dotenv.
+Just released v0.2.0 - a modern .env parser/loader for Mojo, 98%+ compatible with python-dotenv.
 
 ```mojo
-from dotenv import load_dotenv
-_ = load_dotenv(".env")
+from dotenv import load_dotenv, find_dotenv
+var env_path = find_dotenv()  # Auto-discover .env
+_ = load_dotenv(env_path)
 print(os.getenv("DATABASE_URL"))
 ```
 
-✅ Parse to Dict or load to environment
-✅ Comprehensive tests with Python interop validation
-✅ Modern Mojo 0.26.x
+✅ Variable expansion, multiline values, escape sequences
+✅ Auto-discovery with `find_dotenv()`
+✅ 42 comprehensive tests with TestSuite framework
+✅ Modern Mojo 2025/2026
 
 📦 https://github.com/databooth/mojo-dotenv
 
@@ -120,30 +129,32 @@ Built to fill the gap left by mojoenv (2023). Feedback welcome!
 **Longer version (if allowed):**
 
 ```
-🎉 **Announcing mojo-dotenv v0.1.0** 🔥
+🎉 **Announcing mojo-dotenv v0.2.0** 🔥
 
-A production-ready `.env` file parser and loader for Mojo!
+A production-ready `.env` file parser and loader for Mojo with near-100% python-dotenv compatibility!
 
 **What it does:**
 Load environment variables from .env files (12-factor app methodology)
 
 **Quick example:**
 ```mojo
-from dotenv import load_dotenv, dotenv_values
+from dotenv import load_dotenv, dotenv_values, find_dotenv
 from os import getenv
 
 fn main() raises:
-    _ = load_dotenv(".env")
+    var env_path = find_dotenv()  # Auto-discover
+    _ = load_dotenv(env_path)
     print(getenv("DATABASE_URL"))
 ```
 
 **Highlights:**
-✅ 95%+ python-dotenv compatible (validated with Python interop tests)
-✅ `dotenv_values()` - parse to Dict
-✅ `load_dotenv()` - set environment variables
-✅ Modern Mojo 0.26.x syntax
-✅ Comprehensive test suite
-✅ Multiple installation methods
+✅ 98%+ python-dotenv compatible (42 comprehensive tests)
+✅ Variable expansion (`${VAR}` and `$VAR` syntax)
+✅ Multiline values and escape sequences (`\n`, `\t`, etc.)
+✅ `find_dotenv()` - automatic .env file discovery
+✅ `dotenv_values()` - parse to Dict, `load_dotenv()` - set environment
+✅ Modern Mojo 2025/2026 syntax
+✅ Mojo's TestSuite framework for all tests
 
 **Installation:**
 Git submodule (recommended):
@@ -159,8 +170,8 @@ Or see distribution guide for other methods.
 - mojoenv by @itsdevcoffee (inspired this modern rewrite)
 
 **Repository:** https://github.com/databooth/mojo-dotenv
-**License:** Apache 2.0
-**Status:** Phase 1 & 2 complete, Phase 3 in progress
+**License:** MIT License
+**Status:** Production-ready with advanced features
 
 PRs and feedback welcome! 🚀
 ```
@@ -172,14 +183,15 @@ PRs and feedback welcome! 🚀
 ### Twitter/X
 
 ```
-🔥 Just released mojo-dotenv v0.1.0!
+🔥 Just released mojo-dotenv v0.2.0!
 
-Load .env files in @Modular_AI Mojo - 95%+ compatible with python-dotenv
+Load .env files in @Modular_AI Mojo - 98%+ compatible with python-dotenv
 
-✅ Parse to Dict
-✅ Load to environment  
-✅ Comprehensive tests
-✅ Modern Mojo 0.26.x
+✅ Variable expansion (${VAR})
+✅ Multiline values & escape sequences
+✅ Auto-discovery with find_dotenv()
+✅ 42 tests with TestSuite
+✅ Modern Mojo 2025/2026
 
 📦 https://github.com/databooth/mojo-dotenv
 
@@ -189,21 +201,24 @@ Load .env files in @Modular_AI Mojo - 95%+ compatible with python-dotenv
 ### LinkedIn
 
 ```
-Excited to share mojo-dotenv v0.1.0 🔥
+Excited to share mojo-dotenv v0.2.0 🔥
 
-A production-ready .env file parser and loader for Modular's Mojo programming language.
+A production-ready .env file parser and loader for Modular's Mojo programming language with near-100% python-dotenv compatibility.
 
 Key features:
-• 95%+ compatible with python-dotenv
+• 98%+ compatible with python-dotenv
+• Variable expansion (${VAR} and $VAR syntax)
+• Multiline values and escape sequences (\n, \t, etc.)
+• Auto-discovery with find_dotenv()
 • Parse .env files to Dict or load into environment
-• Comprehensive test suite with Python interop validation
-• Modern Mojo 0.26.x implementation
+• 42 comprehensive tests using Mojo's TestSuite framework
+• Modern Mojo 2025/2026 implementation
 
 This fills a gap in the Mojo ecosystem for configuration management following the 12-factor app methodology.
 
 Built on the excellent work of python-dotenv (Saurabh Kumar) and mojoenv (itsdevcoffee).
 
-Apache 2.0 licensed, contributions welcome!
+MIT License, contributions welcome!
 
 Repository: https://github.com/databooth/mojo-dotenv
 
@@ -218,10 +233,10 @@ Repository: https://github.com/databooth/mojo-dotenv
 A: mojoenv was built for Mojo in 2023 and requires significant refactoring due to language evolution (List syntax, inout→mut, trait conformance, .mojopkg format). A modern rewrite with current best practices and comprehensive testing was more appropriate. Full analysis in repo.
 
 **Q: What's different from python-dotenv?**
-A: 95%+ compatible! Minor differences: more lenient with unclosed quotes, skips keys without `=` instead of returning None. Documented in CHANGELOG.
+A: 98%+ compatible! Minor differences: more lenient with unclosed quotes, keys without `=` return empty string instead of None. Documented in CHANGELOG.
 
 **Q: Production ready?**
-A: Yes for basic use cases (Phase 1 & 2 complete). Advanced features (variable expansion, multiline values) planned for Phase 3.
+A: Yes! Full-featured with variable expansion, multiline values, escape sequences, and auto-discovery.
 
 **Q: Package manager support?**
 A: Currently git submodule or source copy recommended. .mojopkg available but not portable across Mojo versions. Will integrate with official package registry when available.
