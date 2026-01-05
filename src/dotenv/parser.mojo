@@ -225,7 +225,7 @@ fn parse_dotenv(content: String) raises -> Dict[String, String]:
     """Parse the entire content of a .env file.
     
     Performs two passes:
-    1. Parse all lines to extract key-value pairs
+    1. Parse all lines to extract key-value pairs (handles multiline values)
     2. Expand variable references in values
     
     Args:
@@ -237,12 +237,72 @@ fn parse_dotenv(content: String) raises -> Dict[String, String]:
     var result = Dict[String, String]()
     var lines = content.split("\n")
     
-    # First pass: parse all lines
-    for i in range(len(lines)):
-        var parsed = parse_line(String(lines[i]))
-        if parsed:
-            var pair = parsed.value()
-            result[pair[0]] = pair[1]
+    # First pass: parse all lines, handling multiline values
+    var i = 0
+    while i < len(lines):
+        var line = String(lines[i])
+        
+        # Check if line starts a quoted value that may span multiple lines
+        var stripped = String(line.strip())
+        if len(stripped) > 0 and not stripped.startswith("#"):
+            # Strip export prefix if present
+            if stripped.startswith("export "):
+                stripped = String(String(stripped[7:]).strip())
+            
+            # Check for KEY= pattern
+            var parts = stripped.split("=", 1)
+            if len(parts) == 2:
+                var key = String(parts[0].strip())
+                var value_part = String(parts[1].strip())
+                
+                # Check if value starts with quote
+                if len(value_part) > 0 and (value_part[0] == '"' or value_part[0] == "'"):
+                    var quote_char = value_part[0]
+                    var value_len = len(value_part)
+                    
+                    # Check if quote is closed on same line
+                    var closed = False
+                    if value_len > 1 and value_part[value_len - 1] == quote_char:
+                        # Check it's not escaped
+                        if value_len < 2 or value_part[value_len - 2] != "\\":
+                            closed = True
+                    
+                    if not closed:
+                        # Multiline value - collect until closing quote
+                        var full_value = value_part
+                        i += 1
+                        while i < len(lines):
+                            var next_line = String(lines[i])
+                            full_value += "\n" + next_line
+                            
+                            # Check if this line closes the quote
+                            var next_len = len(next_line)
+                            if next_len > 0 and next_line[next_len - 1] == quote_char:
+                                # Check it's not escaped
+                                if next_len < 2 or next_line[next_len - 2] != "\\":
+                                    break
+                            i += 1
+                        
+                        # Parse the complete multiline value
+                        var complete_line = key + "=" + full_value
+                        var parsed = parse_line(complete_line)
+                        if parsed:
+                            var pair = parsed.value()
+                            result[pair[0]] = pair[1]
+                    else:
+                        # Single line value
+                        var parsed = parse_line(line)
+                        if parsed:
+                            var pair = parsed.value()
+                            result[pair[0]] = pair[1]
+                else:
+                    # Unquoted value
+                    var parsed = parse_line(line)
+                    if parsed:
+                        var pair = parsed.value()
+                        result[pair[0]] = pair[1]
+        
+        i += 1
     
     # Second pass: expand variables
     var expanded = Dict[String, String]()
