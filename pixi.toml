@@ -12,13 +12,15 @@ env = { MOJO_PATH = "$PIXI_PROJECT_ROOT/src" }
 # Development tasks
 mojo-version = "mojo --version"
 test = "mojo -I src tests/test_basic.mojo"
-test-all = "mojo -I src tests/*.mojo"
+test-compat = "mojo -I src tests/test_python_compat.mojo"
+test-load = "mojo -I src tests/test_load_dotenv.mojo"
+test-all = "mojo -I src tests/test_basic.mojo && mojo -I src tests/test_python_compat.mojo && mojo -I src tests/test_load_dotenv.mojo"
 
 # Build tasks
 build = "mojo package src/dotenv -o dotenv.mojopkg"
 
 # Example tasks
-example-simple = "mojo examples/simple.mojo"
+example-simple = "mojo -I src examples/simple.mojo"
 
 # Validation tasks
 check-mojoenv = "cd ../mojoenv && mojo main.mojo"
