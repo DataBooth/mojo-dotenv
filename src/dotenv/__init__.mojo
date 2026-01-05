@@ -6,6 +6,7 @@ A modern implementation of .env file parsing for Mojo, compatible with python-do
 from pathlib import Path
 from collections import Dict
 from .parser import parse_dotenv
+from .loader import load_dotenv
 
 
 fn dotenv_values(dotenv_path: String) raises -> Dict[String, String]:

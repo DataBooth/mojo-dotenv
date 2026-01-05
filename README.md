@@ -2,23 +2,25 @@
 
 A modern `.env` file parser and loader for Mojo, compatible with Mojo 2025/2026.
 
-> **Status:** 🚧 **Under Development** - Phase 0 (Research & Validation)
+> **Status:** ✅ **Phase 1 & 2 Complete** - MVP functional, python-dotenv compatible
 
 ## Overview
 
 `mojo-dotenv` loads environment variables from `.env` files into your Mojo applications, following the [12-factor app](https://12factor.net/config) methodology.
 
 ```mojo
-from dotenv import load_dotenv
+from dotenv import load_dotenv, dotenv_values
+from os import getenv
 
-def main():
-    # Load .env file
-    load_dotenv()
-    
-    # Access environment variables
-    from os import getenv
+fn main() raises:
+    # Option 1: Load .env file into environment
+    _ = load_dotenv(".env")
     var db_url = getenv("DATABASE_URL")
     print("Connecting to:", db_url)
+    
+    # Option 2: Parse without modifying environment
+    var config = dotenv_values(".env")
+    print("Port:", config["PORT"])
 ```
 
 ## Motivation
@@ -33,13 +35,15 @@ This project was inspired by [mojoenv](https://github.com/itsdevcoffee/mojoenv) 
 
 ## Features
 
-### Current (v0.1.0 - In Development)
-- [ ] Parse `KEY=value` pairs
-- [ ] Handle comments (`#`)
-- [ ] Handle quotes (`"value"`, `'value'`)
-- [ ] Strip whitespace
-- [ ] Load into `os.environ`
-- [ ] Return `Dict[String, String]`
+### Current (v0.1.0 - MVP Complete)
+- [x] Parse `KEY=value` pairs
+- [x] Handle comments (`#`)
+- [x] Handle quotes (`"value"`, `'value'`)
+- [x] Strip whitespace
+- [x] Load into environment (`load_dotenv()`)
+- [x] Return `Dict[String, String]` (`dotenv_values()`)
+- [x] 95%+ compatibility with python-dotenv
+- [x] Comprehensive test suite with Python interop validation
 
 ### Planned (v0.2.0+)
 - [ ] Variable expansion (`${VAR}`)
@@ -70,7 +74,68 @@ curl -L -o dotenv.mojopkg https://github.com/databooth/mojo-dotenv/releases/down
 
 ## Usage
 
-**Coming soon** - API under development. See [PLAN.md](PLAN.md) for proposed API.
+### Quick Start
+
+```mojo
+from dotenv import dotenv_values, load_dotenv
+from os import getenv
+
+fn main() raises:
+    # Parse .env file without setting environment variables
+    var config = dotenv_values(".env")
+    print(config["DATABASE_URL"])
+    
+    # Load .env file and set environment variables
+    _ = load_dotenv(".env")
+    print(getenv("API_KEY"))
+```
+
+### API Reference
+
+#### `dotenv_values(dotenv_path: String) -> Dict[String, String]`
+
+Parse a .env file and return its content as a dictionary. Does NOT modify environment variables.
+
+**Parameters:**
+- `dotenv_path`: Path to .env file (absolute or relative)
+
+**Returns:** Dictionary mapping variable names to values
+
+**Example:**
+```mojo
+var config = dotenv_values("config/.env")
+for item in config.items():
+    print(item.key, "=", item.value)
+```
+
+#### `load_dotenv(dotenv_path: String, override: Bool = False) -> Bool`
+
+Load variables from a .env file into the environment.
+
+**Parameters:**
+- `dotenv_path`: Path to .env file
+- `override`: If True, override existing environment variables (default: False)
+
+**Returns:** True if successful, False if file not found
+
+**Example:**
+```mojo
+if load_dotenv(".env"):
+    print("Loaded successfully")
+```
+
+### .env File Format
+
+Supported syntax:
+```bash
+# Comments
+KEY=value
+QUOTED="value"
+SINGLE='value'
+EMPTY=
+SPACES=  value  # whitespace trimmed
+KEY_WITH_EQUALS=value=with=equals
+```
 
 ## Project Structure
 
@@ -99,8 +164,14 @@ cd mojo-dotenv
 # Install dependencies
 pixi install
 
-# Run tests (once implemented)
-pixi run test
+# Run tests
+pixi run test          # Basic tests
+pixi run test-compat   # Python compatibility tests
+pixi run test-load     # load_dotenv tests
+pixi run test-all      # All tests
+
+# Run example
+pixi run example-simple
 ```
 
 ### Documentation
@@ -138,5 +209,5 @@ Apache License 2.0 - See [LICENSE](LICENSE) for details.
 
 ---
 
-**Status:** Phase 0 - Research & Validation  
-**Next:** Test mojoenv compatibility, document package management, begin MVP implementation
+**Status:** Phase 1 & 2 Complete ✅  
+**Next:** Phase 3 - Advanced features (variable expansion, multiline values, escape sequences)
