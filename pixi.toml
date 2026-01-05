@@ -5,11 +5,14 @@ name = "mojo-dotenv"
 platforms = ["osx-arm64"]
 version = "0.1.0"
 
+[activation]
+env = { MOJO_PATH = "$PIXI_PROJECT_ROOT/src" }
+
 [tasks]
 # Development tasks
 mojo-version = "mojo --version"
-test = "mojo tests/test_basic.mojo"
-test-all = "mojo tests/*.mojo"
+test = "mojo -I src tests/test_basic.mojo"
+test-all = "mojo -I src tests/*.mojo"
 
 # Build tasks
 build = "mojo package src/dotenv -o dotenv.mojopkg"
