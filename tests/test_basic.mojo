@@ -1,82 +1,51 @@
 """Basic tests for mojo-dotenv."""
 
+from testing import assert_equal
 from dotenv import dotenv_values
 
 
-fn test_basic_parsing() raises:
+def test_basic_parsing():
     """Test basic KEY=value parsing."""
-    print("Testing basic.env...")
     var result = dotenv_values("tests/fixtures/basic.env")
     
-    # Check that we got the expected keys
-    print("  KEY1 =", result["KEY1"])
-    print("  KEY2 =", result["KEY2"])
-    print("  DATABASE_URL =", result["DATABASE_URL"])
-    print("  PORT =", result["PORT"])
-    
     # Basic assertions
-    if result["KEY1"] != "value1":
-        raise Error("Expected KEY1='value1'")
-    if result["DATABASE_URL"] != "postgresql://localhost/db":
-        raise Error("Expected DATABASE_URL='postgresql://localhost/db'")
-    
-    print("✓ Basic parsing works!\n")
+    assert_equal(result["KEY1"], "value1")
+    assert_equal(result["KEY2"], "value2")
+    assert_equal(result["DATABASE_URL"], "postgresql://localhost/db")
+    assert_equal(result["PORT"], "8080")
 
 
-fn test_quotes() raises:
+def test_quotes():
     """Test quote stripping."""
-    print("Testing quotes.env...")
     var result = dotenv_values("tests/fixtures/quotes.env")
     
-    print("  SINGLE =", result["SINGLE"])
-    print("  DOUBLE =", result["DOUBLE"])
-    print("  MIXED =", result["MIXED"])
-    
-    if result["SINGLE"] != "single quoted value":
-        raise Error("Expected SINGLE='single quoted value'")
-    if result["DOUBLE"] != "double quoted value":
-        raise Error("Expected DOUBLE='double quoted value'")
-    if result["MIXED"] != 'has "inner" quotes':
-        raise Error('Expected MIXED=\'has "inner" quotes\'')
-    
-    print("✓ Quote handling works!\n")
+    assert_equal(result["SINGLE"], "single quoted value")
+    assert_equal(result["DOUBLE"], "double quoted value")
+    assert_equal(result["MIXED"], 'has "inner" quotes')
 
 
-fn test_comments() raises:
+def test_comments():
     """Test comment handling."""
-    print("Testing comments.env...")
     var result = dotenv_values("tests/fixtures/comments.env")
     
-    print("  KEY1 =", result["KEY1"])
-    print("  KEY2 =", result["KEY2"])
-    print("  KEY3 =", result["KEY3"])
-    
-    if result["KEY1"] != "value1":
-        raise Error("Expected KEY1='value1'")
-    
-    print("✓ Comment handling works!\n")
+    assert_equal(result["KEY1"], "value1")
+    assert_equal(result["KEY2"], "value2")
+    assert_equal(result["KEY3"], "value3")
 
 
-fn test_whitespace() raises:
+def test_whitespace():
     """Test whitespace trimming."""
-    print("Testing whitespace.env...")
     var result = dotenv_values("tests/fixtures/whitespace.env")
     
-    print("  KEY1 =", result["KEY1"])
-    print("  KEY2 =", result["KEY2"])
-    
-    if result["KEY1"] != "value1":
-        raise Error("Expected KEY1='value1' (whitespace trimmed)")
-    
-    print("✓ Whitespace handling works!\n")
+    assert_equal(result["KEY1"], "value1")
+    assert_equal(result["KEY2"], "value2")
 
 
-fn main() raises:
-    print("=== mojo-dotenv Basic Tests ===\n")
-    
-    test_basic_parsing()
-    test_quotes()
-    test_comments()
-    test_whitespace()
-    
-    print("=== All tests passed! ===")
+def main():
+    from testing import TestSuite
+    var suite = TestSuite()
+    suite.test[test_basic_parsing]()
+    suite.test[test_quotes]()
+    suite.test[test_comments]()
+    suite.test[test_whitespace]()
+    suite^.run()

@@ -14,8 +14,15 @@ mojo-version = "mojo --version"
 
 # Individual tests (for quick iteration)
 test-basic = "mojo -I src tests/test_basic.mojo"
-test-compat = "mojo -I src tests/test_python_compat.mojo"
+test-escapes = "mojo -I src tests/test_escapes.mojo"
+test-export = "mojo -I src tests/test_export.mojo"
 test-load = "mojo -I src tests/test_load_dotenv.mojo"
+test-multiline = "mojo -I src tests/test_multiline.mojo"
+test-variables = "mojo -I src tests/test_variables.mojo"
+test-phase3plus = "mojo -I src tests/test_phase3plus.mojo"
+test-override = "mojo -I src tests/test_override.mojo"
+test-helpers = "mojo -I src tests/test_helpers.mojo"
+test-compat = "mojo -I src tests/test_python_compat.mojo"
 
 # Run all tests
 test-all = """bash -c '
@@ -23,11 +30,10 @@ set -e
 echo "=== Running All Tests ==="
 for test_file in tests/test_*.mojo; do
   echo ""
-  echo "Running: $test_file"
   mojo -I src "$test_file"
 done
 echo ""
-echo "=== All Tests Passed! ==="
+echo "=== All Tests Complete! ==="
 '"""
 
 # Build tasks

@@ -1,38 +1,23 @@
 """Test load_dotenv functionality."""
 
+from testing import assert_equal, assert_true
 from dotenv import load_dotenv
 from os import getenv
 
 
-fn main() raises:
-    print("=== Testing load_dotenv() ===\n")
-    
-    # Load the basic.env fixture
-    print("Loading tests/fixtures/basic.env...")
+def test_load_dotenv_basic():
+    """Test loading .env file into environment."""
     var success = load_dotenv("tests/fixtures/basic.env")
-    
-    if not success:
-        raise Error("Failed to load .env file")
-    
-    print("✓ File loaded successfully\n")
+    assert_true(success, "Failed to load .env file")
     
     # Check that environment variables were set
-    print("Checking environment variables:")
-    
-    var key1 = getenv("KEY1")
-    print("  KEY1 =", key1)
-    if key1 != "value1":
-        raise Error("Expected KEY1='value1', got '" + key1 + "'")
-    
-    var db_url = getenv("DATABASE_URL")
-    print("  DATABASE_URL =", db_url)
-    if db_url != "postgresql://localhost/db":
-        raise Error("Expected DATABASE_URL='postgresql://localhost/db'")
-    
-    var port = getenv("PORT")
-    print("  PORT =", port)
-    if port != "8080":
-        raise Error("Expected PORT='8080'")
-    
-    print("\n✓ All environment variables set correctly!")
-    print("\n=== load_dotenv() test passed! ===")
+    assert_equal(getenv("KEY1"), "value1")
+    assert_equal(getenv("DATABASE_URL"), "postgresql://localhost/db")
+    assert_equal(getenv("PORT"), "8080")
+
+
+def main():
+    from testing import TestSuite
+    var suite = TestSuite()
+    suite.test[test_load_dotenv_basic]()
+    suite^.run()

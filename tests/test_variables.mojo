@@ -1,66 +1,47 @@
 """Test variable expansion support."""
 
+from testing import assert_equal, assert_true
 from dotenv import dotenv_values
 
 
-fn main() raises:
-    print("=== Testing variable expansion ===\n")
-    
+def test_variable_expansion_brace_syntax():
+    """Test ${VAR} syntax expansion."""
     var result = dotenv_values("tests/fixtures/variables.env")
-    
-    print("Parsed and expanded values:")
-    for item in result.items():
-        print("  " + item.key + " = " + item.value)
-    
-    print()
-    
-    # Test ${VAR} syntax
-    var base = result["BASE"]
-    var bin_dir = result["BIN_DIR"]
-    print("BASE:", base)
-    print("BIN_DIR:", bin_dir)
-    if bin_dir != "/usr/local/bin":
-        raise Error("Expected BIN_DIR='/usr/local/bin', got '" + bin_dir + "'")
-    
-    var lib_dir = result["LIB_DIR"]
-    print("LIB_DIR:", lib_dir)
-    if lib_dir != "/usr/local/lib":
-        raise Error("Expected LIB_DIR='/usr/local/lib'")
-    
-    # Test $VAR syntax
-    var home_var = result["HOME_VAR"]
-    var user_bin = result["USER_BIN"]
-    print("\nHOME_VAR:", home_var)
-    print("USER_BIN:", user_bin)
-    if user_bin != "/home/user/bin":
-        raise Error("Expected USER_BIN='/home/user/bin'")
-    
-    # Test mixed syntax
-    var full_path = result["FULL_PATH"]
-    print("\nFULL_PATH:", full_path)
-    if full_path != "/usr/local/share:/home/user/local":
-        raise Error("Expected FULL_PATH='/usr/local/share:/home/user/local'")
-    
-    # Test forward reference (defined later in file)
-    var derived = result["DERIVED"]
-    var target = result["TARGET"]
-    print("\nDERIVED:", derived)
-    print("TARGET:", target)
-    if derived != "derived_value":
-        raise Error("Expected DERIVED='derived_value' (forward reference)")
-    
-    # Test system environment variable
-    var current_user = result["CURRENT_USER"]
-    print("\nCURRENT_USER:", current_user)
-    if len(current_user) == 0:
-        print("  (USER env var not set, got empty)")
-    else:
-        print("  (Expanded from system USER env var)")
-    
-    # Test undefined variable (should keep literal)
-    var undefined = result["UNDEFINED"]
-    print("\nUNDEFINED:", undefined)
-    if undefined != "${DOES_NOT_EXIST}":
-        print("  Warning: expected literal '${DOES_NOT_EXIST}', got:", undefined)
-    
-    print("\n✓ All variable expansion tests passed!\n")
+    assert_equal(result["BIN_DIR"], "/usr/local/bin")
+    assert_equal(result["LIB_DIR"], "/usr/local/lib")
+
+
+def test_variable_expansion_dollar_syntax():
+    """Test $VAR syntax expansion."""
+    var result = dotenv_values("tests/fixtures/variables.env")
+    assert_equal(result["USER_BIN"], "/home/user/bin")
+
+
+def test_variable_expansion_mixed():
+    """Test mixed ${VAR} and $VAR syntax."""
+    var result = dotenv_values("tests/fixtures/variables.env")
+    assert_equal(result["FULL_PATH"], "/usr/local/share:/home/user/local")
+
+
+def test_variable_forward_reference():
+    """Test forward reference (variable defined later in file)."""
+    var result = dotenv_values("tests/fixtures/variables.env")
+    assert_equal(result["DERIVED"], "derived_value")
+    assert_equal(result["TARGET"], "derived_value")
+
+
+def test_undefined_variable_literal():
+    """Test that undefined variables remain literal."""
+    var result = dotenv_values("tests/fixtures/variables.env")
+    assert_equal(result["UNDEFINED"], "${DOES_NOT_EXIST}")
+
+
+def main():
+    from testing import TestSuite
+    var suite = TestSuite()
+    suite.test[test_variable_expansion_brace_syntax]()
+    suite.test[test_variable_expansion_dollar_syntax]()
+    suite.test[test_variable_expansion_mixed]()
+    suite.test[test_variable_forward_reference]()
+    suite.test[test_undefined_variable_literal]()
+    suite^.run()
