@@ -7,6 +7,43 @@ from collections import Dict, Optional
 from os import getenv
 
 
+fn strip_inline_comment(line: String) -> String:
+    """Strip inline comments from a line.
+    
+    Handles # comments after values, but not within quotes.
+    
+    Args:
+        line: Line potentially containing inline comment.
+        
+    Returns:
+        Line with inline comment removed.
+    """
+    var in_single_quote = False
+    var in_double_quote = False
+    var escaped = False
+    
+    for i in range(len(line)):
+        var c = line[i]
+        
+        if escaped:
+            escaped = False
+            continue
+        
+        if c == "\\":
+            escaped = True
+            continue
+        
+        if c == "'" and not in_double_quote:
+            in_single_quote = not in_single_quote
+        elif c == '"' and not in_single_quote:
+            in_double_quote = not in_double_quote
+        elif c == "#" and not in_single_quote and not in_double_quote:
+            # Found unquoted comment
+            return String(line[:i])
+    
+    return line
+
+
 fn expand_variables(value: String, env_dict: Dict[String, String]) raises -> String:
     """Expand variable references in a value.
     
@@ -168,19 +205,21 @@ fn strip_quotes(value: String) -> String:
     return String(v)
 
 
-fn parse_line(line: String) -> Optional[Tuple[String, String]]:
+fn parse_line(line: String, verbose: Bool = False) -> Optional[Tuple[String, String]]:
     """Parse a single line from a .env file.
     
     Handles:
     - KEY=value format
     - export KEY=value format (strips 'export ' prefix)
     - Comments (lines starting with #)
+    - Inline comments (# after value)
     - Blank lines
     - Whitespace trimming
     - Quote stripping
     
     Args:
         line: A single line from a .env file.
+        verbose: Print debug information during parsing.
         
     Returns:
         Optional tuple of (key, value), or None if line should be ignored.
@@ -191,9 +230,12 @@ fn parse_line(line: String) -> Optional[Tuple[String, String]]:
     if len(stripped) == 0:
         return None
     
-    # Ignore comments
+    # Ignore full-line comments
     if stripped.startswith("#"):
         return None
+    
+    # Strip inline comments (after checking for full-line comments)
+    stripped = strip_inline_comment(stripped)
     
     # Strip 'export ' prefix if present
     if stripped.startswith("export "):
@@ -202,10 +244,15 @@ fn parse_line(line: String) -> Optional[Tuple[String, String]]:
     # Split on first '=' only
     var parts = stripped.split("=", 1)
     
-    # Line without '=' - invalid for MVP
+    # Line without '=' - treat as key with empty value
     if len(parts) != 2:
         # python-dotenv treats this as key with None value
-        # For MVP, we'll skip it
+        # We'll use empty string (Mojo Dict doesn't support None values easily)
+        if len(parts) == 1 and len(parts[0].strip()) > 0:
+            var key = String(parts[0].strip())
+            if verbose:
+                print("[dotenv] Key without value: " + key + " (using empty string)")
+            return (key, "")
         return None
     
     var key = String(parts[0].strip())
@@ -221,7 +268,7 @@ fn parse_line(line: String) -> Optional[Tuple[String, String]]:
     return (key, value)
 
 
-fn parse_dotenv(content: String) raises -> Dict[String, String]:
+fn parse_dotenv(content: String, verbose: Bool = False) raises -> Dict[String, String]:
     """Parse the entire content of a .env file.
     
     Performs two passes:
@@ -230,6 +277,7 @@ fn parse_dotenv(content: String) raises -> Dict[String, String]:
     
     Args:
         content: The complete content of a .env file.
+        verbose: Print debug information during parsing.
         
     Returns:
         Dictionary mapping environment variable names to values.
@@ -285,19 +333,21 @@ fn parse_dotenv(content: String) raises -> Dict[String, String]:
                         
                         # Parse the complete multiline value
                         var complete_line = key + "=" + full_value
-                        var parsed = parse_line(complete_line)
+                        var parsed = parse_line(complete_line, verbose)
                         if parsed:
                             var pair = parsed.value()
                             result[pair[0]] = pair[1]
+                            if verbose:
+                                print("[dotenv] Parsed multiline: " + key)
                     else:
                         # Single line value
-                        var parsed = parse_line(line)
+                        var parsed = parse_line(line, verbose)
                         if parsed:
                             var pair = parsed.value()
                             result[pair[0]] = pair[1]
                 else:
                     # Unquoted value
-                    var parsed = parse_line(line)
+                    var parsed = parse_line(line, verbose)
                     if parsed:
                         var pair = parsed.value()
                         result[pair[0]] = pair[1]
