@@ -17,7 +17,8 @@ test-load = "mojo -I src tests/test_load_dotenv.mojo"
 test-all = "mojo -I src tests/test_basic.mojo && mojo -I src tests/test_python_compat.mojo && mojo -I src tests/test_load_dotenv.mojo"
 
 # Build tasks
-build = "mojo package src/dotenv -o dotenv.mojopkg"
+build = "mkdir -p dist && mojo package src/dotenv -o dist/dotenv.mojopkg"
+clean = "rm -rf dist __pycache__ .pytest_cache"
 
 # Example tasks
 example-simple = "mojo -I src examples/simple.mojo"

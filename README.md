@@ -56,20 +56,26 @@ See [PLAN.md](PLAN.md) for detailed roadmap.
 
 ## Installation
 
-**Note:** Not yet released. Coming soon!
+**Recommended**: Source inclusion via git submodule or direct copy.
 
-### Option 1: Source (Development)
+See **[docs/DISTRIBUTION.md](docs/DISTRIBUTION.md)** for complete installation options and packaging guide.
+
+### Quick Start (Git Submodule)
+```bash
+# Add to your project
+cd your-project
+git submodule add https://github.com/databooth/mojo-dotenv vendor/mojo-dotenv
+
+# Use in your code
+mojo -I vendor/mojo-dotenv/src your_app.mojo
+```
+
+### Development Setup
 ```bash
 git clone https://github.com/databooth/mojo-dotenv
 cd mojo-dotenv
-# Use pixi for development
 pixi install
-```
-
-### Option 2: Compiled Package (Future)
-```bash
-# Download from releases (not yet available)
-curl -L -o dotenv.mojopkg https://github.com/databooth/mojo-dotenv/releases/download/v0.1.0/dotenv.mojopkg
+pixi run test-all
 ```
 
 ## Usage
@@ -176,8 +182,11 @@ pixi run example-simple
 
 ### Documentation
 - [PLAN.md](PLAN.md) - Detailed project plan and roadmap
-- [docs/MOJO_PACKAGE_MANAGEMENT.md](docs/MOJO_PACKAGE_MANAGEMENT.md) - Mojo packaging guide
-- [docs/API.md](docs/API.md) - API documentation (coming soon)
+- [CREDITS.md](CREDITS.md) - Acknowledgments and project history
+- [docs/DISTRIBUTION.md](docs/DISTRIBUTION.md) - **Packaging and distribution guide**
+- [docs/MOJO_PACKAGE_MANAGEMENT.md](docs/MOJO_PACKAGE_MANAGEMENT.md) - Mojo packaging ecosystem overview
+- [docs/RESEARCH.md](docs/RESEARCH.md) - python-dotenv API analysis and testing
+- [docs/MOJOENV_COMPATIBILITY_ANALYSIS.md](docs/MOJOENV_COMPATIBILITY_ANALYSIS.md) - mojoenv compatibility findings
 
 ## Contributing
 
@@ -192,9 +201,13 @@ Contributions welcome! This is an open-source project (Apache 2.0).
 
 ## Acknowledgments
 
-- **itsdevcoffee** - Original mojoenv author, pioneered `.env` in Mojo
-- **Modular** - For creating Mojo
-- **python-dotenv** - Reference implementation
+This project builds on excellent prior work:
+
+- **[python-dotenv](https://github.com/theskumar/python-dotenv)** by Saurabh Kumar - Reference implementation and compatibility target. We validate against python-dotenv 1.2.1 and maintain 95%+ compatibility.
+- **[mojoenv](https://github.com/itsdevcoffee/mojoenv)** by itsdevcoffee - Pioneer of `.env` support in Mojo (2023). Inspired this modern rewrite.
+- **Modular Team** - For creating the Mojo programming language
+
+See **[CREDITS.md](CREDITS.md)** for detailed acknowledgments and project history.
 
 ## License
 
