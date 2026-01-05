@@ -59,11 +59,8 @@ fn main() raises:
     # Test 3: New variables should be set regardless of override setting
     print("Test 3: New variables set regardless of override")
     
-    # Clear KEY1 if it exists
-    try:
-        _ = unsetenv("KEY1")
-    except:
-        pass
+    # Clear KEY1 if it exists (unsetenv doesn't raise if var doesn't exist)
+    _ = unsetenv("KEY1")
     
     _ = load_dotenv("tests/fixtures/basic.env", override=False)
     var key1 = getenv("KEY1")
