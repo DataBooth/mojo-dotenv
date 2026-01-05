@@ -33,6 +33,7 @@ fn parse_line(line: String) -> Optional[Tuple[String, String]]:
     
     Handles:
     - KEY=value format
+    - export KEY=value format (strips 'export ' prefix)
     - Comments (lines starting with #)
     - Blank lines
     - Whitespace trimming
@@ -44,7 +45,7 @@ fn parse_line(line: String) -> Optional[Tuple[String, String]]:
     Returns:
         Optional tuple of (key, value), or None if line should be ignored.
     """
-    var stripped = line.strip()
+    var stripped = String(line.strip())
     
     # Ignore empty lines
     if len(stripped) == 0:
@@ -53,6 +54,10 @@ fn parse_line(line: String) -> Optional[Tuple[String, String]]:
     # Ignore comments
     if stripped.startswith("#"):
         return None
+    
+    # Strip 'export ' prefix if present
+    if stripped.startswith("export "):
+        stripped = String(String(stripped[7:]).strip())  # Remove 'export ' and trim
     
     # Split on first '=' only
     var parts = stripped.split("=", 1)
