@@ -372,6 +372,12 @@ fn parse_dotenv(content: String, verbose: Bool = False) raises -> Dict[String, S
                     if parsed:
                         var pair = parsed.value()
                         result[pair[0]] = pair[1]
+            else:
+                # No '=' sign - might be a standalone key
+                var parsed = parse_line(line, verbose)
+                if parsed:
+                    var pair = parsed.value()
+                    result[pair[0]] = pair[1]
         
         i += 1
     
