@@ -6,14 +6,64 @@ This module provides functions to parse .env file lines and extract key-value pa
 from collections import Dict, Optional
 
 
+fn process_escapes(value: String) -> String:
+    """Process escape sequences in a string.
+    
+    Handles:
+    - \n -> newline
+    - \t -> tab
+    - \\ -> backslash
+    - \" -> double quote
+    - \' -> single quote
+    
+    Args:
+        value: String potentially containing escape sequences.
+        
+    Returns:
+        String with escape sequences processed.
+    """
+    var result = String("")
+    var i = 0
+    var len_val = len(value)
+    
+    while i < len_val:
+        if value[i] == "\\" and i + 1 < len_val:
+            # Escape sequence found
+            var next_char = value[i + 1]
+            if next_char == "n":
+                result += "\n"
+                i += 2
+            elif next_char == "t":
+                result += "\t"
+                i += 2
+            elif next_char == "\\":
+                result += "\\"
+                i += 2
+            elif next_char == '"':
+                result += '"'
+                i += 2
+            elif next_char == "'":
+                result += "'"
+                i += 2
+            else:
+                # Unknown escape, keep backslash
+                result += String(value[i])
+                i += 1
+        else:
+            result += String(value[i])
+            i += 1
+    
+    return result
+
+
 fn strip_quotes(value: String) -> String:
-    """Strip outer quotes (single or double) from a value.
+    """Strip outer quotes (single or double) from a value and process escapes.
     
     Args:
         value: The string to strip quotes from.
         
     Returns:
-        The string with outer quotes removed if present.
+        The string with outer quotes removed and escape sequences processed.
     """
     var v = value.strip()
     var v_len = len(v)
@@ -22,8 +72,11 @@ fn strip_quotes(value: String) -> String:
         return String(v)
     
     # Check for matching outer quotes
+    var unquoted: String
     if (v[0] == "'" and v[v_len - 1] == "'") or (v[0] == '"' and v[v_len - 1] == '"'):
-        return String(v[1:v_len - 1])
+        unquoted = String(v[1:v_len - 1])
+        # Process escape sequences only within quoted strings
+        return process_escapes(unquoted)
     
     return String(v)
 
