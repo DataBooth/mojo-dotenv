@@ -1,6 +1,6 @@
 """Environment variable loading functionality."""
 
-from os import setenv
+from os import setenv, getenv
 from pathlib import Path
 from .parser import parse_dotenv
 
@@ -62,10 +62,12 @@ fn load_dotenv(dotenv_path: String, override: Bool = False, verbose: Bool = Fals
             count += 1
         else:
             # Only set if not already in environment
-            # Note: Mojo doesn't have a direct "check if env var exists" function yet
-            # so we'll just set it (same behavior as python-dotenv with override=False)
-            _ = setenv(key, value)
-            count += 1
+            var existing = getenv(key)
+            if len(existing) == 0:
+                _ = setenv(key, value)
+                count += 1
+            elif verbose:
+                print("[dotenv] Skipping existing var: " + key)
     
     if verbose:
         print("[dotenv] Loaded " + String(count) + " variables")

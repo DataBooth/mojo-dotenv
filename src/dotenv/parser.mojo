@@ -7,6 +7,45 @@ from collections import Dict, Optional
 from os import getenv
 
 
+fn count_trailing_backslashes(text: String, end_pos: Int) -> Int:
+    """Count consecutive backslashes before the given position.
+    
+    Args:
+        text: String to examine.
+        end_pos: Position to count backwards from (exclusive).
+        
+    Returns:
+        Number of consecutive backslashes.
+    """
+    var count = 0
+    var idx = end_pos - 1
+    while idx >= 0 and text[idx] == "\\":
+        count += 1
+        idx -= 1
+    return count
+
+
+fn lookup_variable(var_name: String, env_dict: Dict[String, String], fallback_literal: String) raises -> String:
+    """Look up a variable in env_dict, then system environment, else return literal.
+    
+    Args:
+        var_name: Variable name to look up.
+        env_dict: Dictionary of parsed variables.
+        fallback_literal: Literal string to return if variable not found.
+        
+    Returns:
+        Variable value or fallback literal.
+    """
+    if env_dict.__contains__(var_name):
+        return env_dict[var_name]
+    
+    var sys_val = getenv(var_name)
+    if len(sys_val) > 0:
+        return sys_val
+    
+    return fallback_literal
+
+
 fn strip_inline_comment(line: String) -> String:
     """Strip inline comments from a line.
     
@@ -76,16 +115,7 @@ fn expand_variables(value: String, env_dict: Dict[String, String]) raises -> Str
                 
                 if closing != -1:
                     var var_name = String(value[i + 2:closing])
-                    # Try env_dict first, then system environment
-                    if env_dict.__contains__(var_name):
-                        result += String(env_dict[var_name])
-                    else:
-                        var sys_val = getenv(var_name)
-                        if len(sys_val) > 0:
-                            result += sys_val
-                        else:
-                            # Variable not found, keep literal
-                            result += String(value[i:closing + 1])
+                    result += lookup_variable(var_name, env_dict, String(value[i:closing + 1]))
                     i = closing + 1
                 else:
                     # No closing brace, keep literal
@@ -104,16 +134,7 @@ fn expand_variables(value: String, env_dict: Dict[String, String]) raises -> Str
                         var_end += 1
                     
                     var var_name = String(value[i + 1:var_end])
-                    # Try env_dict first, then system environment
-                    if env_dict.__contains__(var_name):
-                        result += String(env_dict[var_name])
-                    else:
-                        var sys_val = getenv(var_name)
-                        if len(sys_val) > 0:
-                            result += sys_val
-                        else:
-                            # Variable not found, keep literal
-                            result += String(value[i:var_end])
+                    result += lookup_variable(var_name, env_dict, String(value[i:var_end]))
                     i = var_end
                 else:
                     # Not a variable name, just a dollar sign
@@ -239,7 +260,7 @@ fn parse_line(line: String, verbose: Bool = False) -> Optional[Tuple[String, Str
     
     # Strip 'export ' prefix if present
     if stripped.startswith("export "):
-        stripped = String(String(stripped[7:]).strip())  # Remove 'export ' and trim
+        stripped = String(String(stripped[7:]).strip())
     
     # Split on first '=' only
     var parts = stripped.split("=", 1)
@@ -311,14 +332,8 @@ fn parse_dotenv(content: String, verbose: Bool = False) raises -> Dict[String, S
                     # Check if quote is closed on same line
                     var closed = False
                     if value_len > 1 and value_part[value_len - 1] == quote_char:
-                        # Count consecutive backslashes before the quote
-                        # Even number (or 0) means quote is not escaped
-                        var num_backslashes = 0
-                        var idx = value_len - 2
-                        while idx >= 0 and value_part[idx] == "\\":
-                            num_backslashes += 1
-                            idx -= 1
-                        if num_backslashes % 2 == 0:
+                        # Even number (or 0) of backslashes means quote is not escaped
+                        if count_trailing_backslashes(value_part, value_len - 1) % 2 == 0:
                             closed = True
                     
                     if not closed:
@@ -332,14 +347,8 @@ fn parse_dotenv(content: String, verbose: Bool = False) raises -> Dict[String, S
                             # Check if this line closes the quote
                             var next_len = len(next_line)
                             if next_len > 0 and next_line[next_len - 1] == quote_char:
-                                # Count consecutive backslashes before the quote
-                                # Even number (or 0) means quote is not escaped
-                                var num_backslashes = 0
-                                var idx = next_len - 2
-                                while idx >= 0 and next_line[idx] == "\\":
-                                    num_backslashes += 1
-                                    idx -= 1
-                                if num_backslashes % 2 == 0:
+                                # Even number (or 0) of backslashes means quote is not escaped
+                                if count_trailing_backslashes(next_line, next_len - 1) % 2 == 0:
                                     break
                             i += 1
                         
