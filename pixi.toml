@@ -3,7 +3,7 @@ authors = ["Michael Booth <michael@databooth.com.au>"]
 channels = ["conda-forge", "https://conda.modular.com/max-nightly"]
 name = "mojo-dotenv"
 platforms = ["osx-arm64"]
-version = "0.1.0"
+version = "0.2.0"
 
 [activation]
 env = { MOJO_PATH = "$PIXI_PROJECT_ROOT/src" }
@@ -11,10 +11,24 @@ env = { MOJO_PATH = "$PIXI_PROJECT_ROOT/src" }
 [tasks]
 # Development tasks
 mojo-version = "mojo --version"
-test = "mojo -I src tests/test_basic.mojo"
+
+# Individual tests (for quick iteration)
+test-basic = "mojo -I src tests/test_basic.mojo"
 test-compat = "mojo -I src tests/test_python_compat.mojo"
 test-load = "mojo -I src tests/test_load_dotenv.mojo"
-test-all = "mojo -I src tests/test_basic.mojo && mojo -I src tests/test_python_compat.mojo && mojo -I src tests/test_load_dotenv.mojo"
+
+# Run all tests
+test-all = """bash -c '
+set -e
+echo "=== Running All Tests ==="
+for test_file in tests/test_*.mojo; do
+  echo ""
+  echo "Running: $test_file"
+  mojo -I src "$test_file"
+done
+echo ""
+echo "=== All Tests Passed! ==="
+'"""
 
 # Build tasks
 build = "mkdir -p dist && mojo package src/dotenv -o dist/dotenv.mojopkg"
