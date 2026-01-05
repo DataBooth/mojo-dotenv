@@ -2,7 +2,7 @@
 
 A modern `.env` file parser and loader for Mojo, compatible with Mojo 2025/2026.
 
-> **Status:** ✅ **Phase 1 & 2 Complete** - MVP functional, python-dotenv compatible
+> **Status:** ✅ **Phase 3+ Complete** - Advanced features, near-100% python-dotenv compatibility
 
 ## Overview
 
@@ -35,22 +35,27 @@ This project was inspired by [mojoenv](https://github.com/itsdevcoffee/mojoenv) 
 
 ## Features
 
-### Current (v0.1.0 - MVP Complete)
+### Current (v0.2.0 - Near-100% python-dotenv Compatible)
 - [x] Parse `KEY=value` pairs
-- [x] Handle comments (`#`)
+- [x] Handle comments (`#` lines and inline comments)
 - [x] Handle quotes (`"value"`, `'value'`)
 - [x] Strip whitespace
 - [x] Load into environment (`load_dotenv()`)
 - [x] Return `Dict[String, String]` (`dotenv_values()`)
-- [x] 95%+ compatibility with python-dotenv
-- [x] Comprehensive test suite with Python interop validation
+- [x] Variable expansion (`${VAR}` and `$VAR` syntax)
+- [x] Multiline values (quoted strings spanning lines)
+- [x] Escape sequences (`\n`, `\t`, `\"`, `\\`, `\'`)
+- [x] Export prefix support (`export KEY=value`)
+- [x] `find_dotenv()` - automatic .env file discovery
+- [x] Keys without `=` (returns empty string)
+- [x] Verbose mode for debugging
+- [x] 98%+ compatibility with python-dotenv
+- [x] Comprehensive test suite (8 test files)
 
-### Planned (v0.2.0+)
-- [ ] Variable expansion (`${VAR}`)
-- [ ] Multiline values
-- [ ] Escape sequences
-- [ ] Multiple .env files
-- [ ] Export prefix support
+### Planned (v0.3.0+)
+- [ ] Multiple .env files with precedence
+- [ ] Stream input support
+- [ ] Custom encoding options
 
 See [PLAN.md](PLAN.md) for detailed roadmap.
 
@@ -98,12 +103,13 @@ fn main() raises:
 
 ### API Reference
 
-#### `dotenv_values(dotenv_path: String) -> Dict[String, String]`
+#### `dotenv_values(dotenv_path: String, verbose: Bool = False) -> Dict[String, String]`
 
 Parse a .env file and return its content as a dictionary. Does NOT modify environment variables.
 
 **Parameters:**
 - `dotenv_path`: Path to .env file (absolute or relative)
+- `verbose`: Print debug information during parsing (default: False)
 
 **Returns:** Dictionary mapping variable names to values
 
@@ -114,13 +120,14 @@ for item in config.items():
     print(item.key, "=", item.value)
 ```
 
-#### `load_dotenv(dotenv_path: String, override: Bool = False) -> Bool`
+#### `load_dotenv(dotenv_path: String, override: Bool = False, verbose: Bool = False) -> Bool`
 
 Load variables from a .env file into the environment.
 
 **Parameters:**
 - `dotenv_path`: Path to .env file
 - `override`: If True, override existing environment variables (default: False)
+- `verbose`: Print debug information during loading (default: False)
 
 **Returns:** True if successful, False if file not found
 
@@ -130,17 +137,57 @@ if load_dotenv(".env"):
     print("Loaded successfully")
 ```
 
+#### `find_dotenv(filename: String = ".env", raise_error_if_not_found: Bool = False, usecwd: Bool = False) -> String`
+
+Search for a .env file by traversing parent directories.
+
+**Parameters:**
+- `filename`: Name of .env file to search for (default: ".env")
+- `raise_error_if_not_found`: Raise error if file not found (default: False)
+- `usecwd`: Start search from current directory instead of file's directory (default: False)
+
+**Returns:** Path to .env file, or empty string if not found
+
+**Example:**
+```mojo
+var env_path = find_dotenv()
+if len(env_path) > 0:
+    _ = load_dotenv(env_path)
+```
+
 ### .env File Format
 
 Supported syntax:
 ```bash
-# Comments
+# Full-line comments
 KEY=value
 QUOTED="value"
 SINGLE='value'
 EMPTY=
-SPACES=  value  # whitespace trimmed
+SPACES=  value  # Inline comments supported
 KEY_WITH_EQUALS=value=with=equals
+
+# Export prefix (stripped automatically)
+export DATABASE_URL=postgresql://localhost
+
+# Variable expansion
+BASE_DIR=/home/user
+DATA_DIR=${BASE_DIR}/data
+LOG_FILE=$BASE_DIR/app.log
+
+# Escape sequences (in quoted strings only)
+MULTILINE="Line 1\nLine 2\nLine 3"
+TABS="Col1\tCol2\tCol3"
+QUOTE="He said \"hello\""
+PATH="C:\\\\Users\\\\name"
+
+# Multiline values (quoted strings can span lines)
+PRIVATE_KEY="-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAAS
+-----END PRIVATE KEY-----"
+
+# Keys without values
+KEY_WITHOUT_VALUE
 ```
 
 ## Project Structure

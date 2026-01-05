@@ -311,8 +311,14 @@ fn parse_dotenv(content: String, verbose: Bool = False) raises -> Dict[String, S
                     # Check if quote is closed on same line
                     var closed = False
                     if value_len > 1 and value_part[value_len - 1] == quote_char:
-                        # Check it's not escaped
-                        if value_len < 2 or value_part[value_len - 2] != "\\":
+                        # Count consecutive backslashes before the quote
+                        # Even number (or 0) means quote is not escaped
+                        var num_backslashes = 0
+                        var idx = value_len - 2
+                        while idx >= 0 and value_part[idx] == "\\":
+                            num_backslashes += 1
+                            idx -= 1
+                        if num_backslashes % 2 == 0:
                             closed = True
                     
                     if not closed:
@@ -326,8 +332,14 @@ fn parse_dotenv(content: String, verbose: Bool = False) raises -> Dict[String, S
                             # Check if this line closes the quote
                             var next_len = len(next_line)
                             if next_len > 0 and next_line[next_len - 1] == quote_char:
-                                # Check it's not escaped
-                                if next_len < 2 or next_line[next_len - 2] != "\\":
+                                # Count consecutive backslashes before the quote
+                                # Even number (or 0) means quote is not escaped
+                                var num_backslashes = 0
+                                var idx = next_len - 2
+                                while idx >= 0 and next_line[idx] == "\\":
+                                    num_backslashes += 1
+                                    idx -= 1
+                                if num_backslashes % 2 == 0:
                                     break
                             i += 1
                         
