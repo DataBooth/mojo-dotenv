@@ -21,7 +21,18 @@ This document tracks all distribution channels for sharing mojo-dotenv with the 
 - ✅ Posted to https://forum.modular.com/c/community-showcase/8
 - **Next**: Update post if needed after release is created
 
-### 3. awesome-mojo Lists (GitHub)
+### 3. modular-community Channel (🔥 OFFICIAL)
+
+**This is the official Modular-hosted package channel** - highest priority!
+
+- ⏳ Fork repository: `gh repo fork modular/modular-community --clone`
+- ⏳ Create rattler-build recipe (see `docs/MODULAR_COMMUNITY_SUBMISSION.md`)
+- ⏳ Test locally with rattler-build
+- ⏳ Submit PR
+- **URL**: https://github.com/modular/modular-community
+- **Benefit**: Users can install with `pixi add mojo-dotenv`
+
+### 4. awesome-mojo Lists (GitHub)
 
 Submit PRs to these curated lists:
 
@@ -36,12 +47,12 @@ Submit PRs to these curated lists:
 - ⏳ **mfranzon/mojo-is-awesome**: https://github.com/mfranzon/mojo-is-awesome
 - ⏳ **coderonion/awesome-mojo-max-mlir**: https://github.com/coderonion/awesome-mojo-max-mlir
 
-### 4. Modular Discord
+### 5. Modular Discord
 - ⏳ Post to `#community-packages` or `#show-and-tell` channel
 - **Template**: Use shorter version from `docs/COMMUNITY_ANNOUNCEMENTS.md`
 - **Discord URL**: Accessible through https://www.modular.com/discord
 
-### 5. Social Media (Optional)
+### 6. Social Media (Optional)
 
 #### Twitter/X
 - ⏳ Post announcement
@@ -54,7 +65,7 @@ Submit PRs to these curated lists:
 - **Template**: Available in `docs/COMMUNITY_ANNOUNCEMENTS.md`
 - **Tags**: #Mojo #Modular #OpenSource #ProgrammingLanguages
 
-### 6. DataBooth Blog
+### 7. DataBooth Blog
 - ⏳ Publish technical blog post
 - **Draft**: `blog_post.md` in repository root
 - **URL**: https://www.databooth.com.au (when published)
@@ -79,13 +90,36 @@ Before creating GitHub Release v0.2.0:
 After creating GitHub Release v0.2.0:
 
 1. ⏳ Verify `.mojopkg` was automatically built and attached
-2. ⏳ Submit to awesome-mojo lists
-3. ⏳ Post to Discord
-4. ⏳ Update Forum post (if needed)
-5. ⏳ Social media announcements (optional)
-6. ⏳ Publish blog post
+2. ⏳ **Submit to modular-community channel** (highest priority - official)
+3. ⏳ Submit to awesome-mojo lists
+4. ⏳ Post to Discord
+5. ⏳ Update Forum post (if needed)
+6. ⏳ Social media announcements (optional)
+7. ⏳ Publish blog post
 
 ## Commands Reference
+
+### Submit to modular-community
+
+See detailed guide in `docs/MODULAR_COMMUNITY_SUBMISSION.md`
+
+```bash
+# Quick steps
+gh repo fork modular/modular-community --clone
+cd modular-community
+mkdir -p recipes/mojo-dotenv
+
+# Create recipe.yaml (see MODULAR_COMMUNITY_SUBMISSION.md)
+# Test locally
+rattler-build build --recipe recipes/mojo-dotenv/recipe.yaml
+
+# Submit PR
+git checkout -b add-mojo-dotenv
+git add recipes/mojo-dotenv/
+git commit -m "Add mojo-dotenv package"
+git push origin add-mojo-dotenv
+gh pr create --title "Add mojo-dotenv - .env file loader for Mojo"
+```
 
 ### Create GitHub Release
 ```bash
