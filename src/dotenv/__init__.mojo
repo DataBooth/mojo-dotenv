@@ -17,29 +17,35 @@ fn dotenv_values(dotenv_path: String, verbose: Bool = False) raises -> Dict[Stri
     environment variable names to their values. It does NOT modify
     the actual environment variables.
     
+    If the file does not exist, returns an empty dictionary and prints a warning.
+    This matches python-dotenv behavior (empty dict) but adds visibility.
+    
     Args:
         dotenv_path: Path to the .env file (absolute or relative).
         verbose: Print debug information during parsing (default: False).
         
     Returns:
-        Dictionary mapping variable names to values.
-        
-    Raises:
-        Error: If the file cannot be read.
+        Dictionary mapping variable names to values. Empty dict if file not found.
         
     Examples:
         ```mojo
         from dotenv import dotenv_values
         
         var config = dotenv_values(".env")
-        print(config["DATABASE_URL"])
+        if "DATABASE_URL" in config:
+            print(config["DATABASE_URL"])
         
         # With verbose output
         var config2 = dotenv_values(".env", verbose=True)
         ```
     """
-    # Read the file content
+    # Check if file exists
     var path = Path(dotenv_path)
+    if not path.exists():
+        print("[dotenv] WARNING: File not found: " + dotenv_path + " (returning empty dict)")
+        return Dict[String, String]()
+    
+    # Read the file content
     var content = path.read_text()
     
     if verbose:

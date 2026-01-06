@@ -6,7 +6,7 @@ A modern `.env` file parser and loader for Mojo, compatible with Mojo 2025/2026.
 
 ## Overview
 
-`mojo-dotenv` loads environment variables from `.env` files into your Mojo applications, following the [12-factor app](https://12factor.net/config) methodology.
+`mojo-dotenv` loads environment variables from `.env` files into your Mojo applications.
 
 ```mojo
 from dotenv import load_dotenv, dotenv_values

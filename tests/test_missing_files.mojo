@@ -18,15 +18,11 @@ def test_load_dotenv_missing_file_verbose():
     assert_false(success, "Should return False for non-existent file")
 
 
-def test_dotenv_values_missing_file_raises():
-    """Test dotenv_values with non-existent file raises an error."""
-    var raised = False
-    try:
-        _ = dotenv_values("tests/fixtures/nonexistent.env")
-    except:
-        raised = True
-    
-    assert_true(raised, "Should raise error for non-existent file")
+def test_dotenv_values_missing_file_returns_empty():
+    """Test dotenv_values with non-existent file returns empty dict."""
+    print("Expected output: '[dotenv] WARNING: File not found: tests/fixtures/nonexistent.env (returning empty dict)'")
+    var result = dotenv_values("tests/fixtures/nonexistent.env")
+    assert_equal(len(result), 0, "Should return empty dict for non-existent file")
 
 
 def test_find_dotenv_missing_raises():
@@ -71,7 +67,7 @@ def main():
     var suite = TestSuite()
     suite.test[test_load_dotenv_missing_file]()
     suite.test[test_load_dotenv_missing_file_verbose]()
-    suite.test[test_dotenv_values_missing_file_raises]()
+    suite.test[test_dotenv_values_missing_file_returns_empty]()
     suite.test[test_find_dotenv_missing_raises]()
     suite.test[test_find_dotenv_missing_returns_empty]()
     suite.test[test_load_dotenv_missing_does_not_affect_env]()
