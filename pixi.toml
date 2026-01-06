@@ -2,7 +2,7 @@
 authors = ["Michael Booth <michael@databooth.com.au>"]
 channels = ["conda-forge", "https://conda.modular.com/max-nightly"]
 name = "mojo-dotenv"
-platforms = ["osx-arm64"]
+platforms = ["osx-arm64", "linux-64"]
 version = "0.2.0"
 
 [activation]
