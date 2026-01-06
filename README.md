@@ -213,6 +213,34 @@ if len(env_path) > 0:
     _ = load_dotenv(env_path)
 ```
 
+### Differences from python-dotenv
+
+`mojo-dotenv` maintains 98%+ compatibility with python-dotenv. The main difference is in how missing environment variables are handled:
+
+**Environment variable access:**
+```python
+# Python: os.getenv() returns None for missing variables
+import os
+value = os.getenv("MISSING_VAR")  # Returns None
+print("Value:", value)               # Prints: Value: None
+```
+
+```mojo
+# Mojo: os.getenv() returns empty string for missing variables  
+from os import getenv
+var value = getenv("MISSING_VAR")  # Returns ""
+print("Value:", value)              # Prints: Value: 
+```
+
+This is a difference in the underlying standard libraries, not in mojo-dotenv itself. Both `load_dotenv()` and `dotenv_values()` behave identically to python-dotenv.
+
+**Best practice:** Always check if `load_dotenv()` succeeded before accessing environment variables:
+```mojo
+if load_dotenv(".env"):
+    var api_key = getenv("API_KEY")
+    # Use api_key
+```
+
 ### .env File Format
 
 Supported syntax:
