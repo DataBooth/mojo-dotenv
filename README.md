@@ -6,7 +6,7 @@ A modern `.env` file parser and loader for Mojo, compatible with Mojo 2025/2026.
 
 ## Overview
 
-`mojo-dotenv` loads environment variables from `.env` files into your Mojo applications.
+`mojo-dotenv` loads environment variables from `.env` files into your Mojo applications, following the [12-factor app](https://12factor.net/config) methodology.
 
 ```mojo
 from dotenv import load_dotenv, dotenv_values
@@ -14,13 +14,13 @@ from os import getenv
 
 fn main() raises:
     # Option 1: Load .env file into environment
-    _ = load_dotenv(".env")
-    var db_url = getenv("DATABASE_URL")
-    print("Connecting to:", db_url)
+    if load_dotenv(".env"):
+        var db_url = getenv("DATABASE_URL")
+        print("Connecting to:", db_url)
     
-    # Option 2: Parse without modifying environment
+    # Option 2: Parse without modifying environment (with safe key access)
     var config = dotenv_values(".env")
-    print("Port:", config["PORT"])
+    print("Port:", config.get("PORT", "8080"))  # Default to 8080 if not set
 ```
 
 ## Motivation
@@ -146,11 +146,12 @@ from os import getenv
 fn main() raises:
     # Parse .env file without setting environment variables
     var config = dotenv_values(".env")
-    print(config["DATABASE_URL"])
+    # Use .get() for safe key access with defaults
+    print("Database:", config.get("DATABASE_URL", "localhost"))
     
     # Load .env file and set environment variables
-    _ = load_dotenv(".env")
-    print(getenv("API_KEY"))
+    if load_dotenv(".env"):
+        print("API Key:", getenv("API_KEY"))
 ```
 
 ### API Reference
@@ -168,8 +169,13 @@ Parse a .env file and return its content as a dictionary. Does NOT modify enviro
 **Example:**
 ```mojo
 var config = dotenv_values("config/.env")
+# Iterate through all values
 for item in config.items():
     print(item.key, "=", item.value)
+
+# Safe key access with defaults
+var db_url = config.get("DATABASE_URL", "localhost:5432")
+var port = config.get("PORT", "8080")
 ```
 
 #### `load_dotenv(dotenv_path: String, override: Bool = False, verbose: Bool = False) -> Bool`
