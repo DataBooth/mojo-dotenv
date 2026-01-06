@@ -61,11 +61,12 @@ See [PLAN.md](PLAN.md) for detailed roadmap.
 
 ## Installation
 
-**Recommended**: Source inclusion via git submodule or direct copy.
+Choose the installation method that best fits your workflow:
 
-See **[docs/DISTRIBUTION.md](docs/DISTRIBUTION.md)** for complete installation options and packaging guide.
+### Option 1: Git Submodule (Recommended)
 
-### Quick Start (Git Submodule)
+Best for version-controlled projects with easy updates.
+
 ```bash
 # Add to your project
 cd your-project
@@ -73,7 +74,39 @@ git submodule add https://github.com/databooth/mojo-dotenv vendor/mojo-dotenv
 
 # Use in your code
 mojo -I vendor/mojo-dotenv/src your_app.mojo
+
+# Update to latest version
+git submodule update --remote vendor/mojo-dotenv
 ```
+
+### Option 2: Direct Copy
+
+Simplest method for quick projects.
+
+```bash
+# Clone and copy source
+git clone https://github.com/databooth/mojo-dotenv
+cp -r mojo-dotenv/src/dotenv your-project/lib/dotenv
+
+# Use in your code
+mojo -I your-project/lib your_app.mojo
+```
+
+### Option 3: Compiled Package (.mojopkg)
+
+Pre-compiled packages available from [GitHub Releases](https://github.com/databooth/mojo-dotenv/releases).
+
+```bash
+# Download from releases
+curl -L -o dotenv.mojopkg https://github.com/databooth/mojo-dotenv/releases/latest/download/dotenv.mojopkg
+
+# Use in your code
+mojo -I . your_app.mojo  # Ensure dotenv.mojopkg is in import path
+```
+
+⚠️ **Note**: `.mojopkg` files are tied to specific Mojo versions. Check the release notes for compatibility. Source installation is recommended for maximum compatibility.
+
+See **[docs/DISTRIBUTION.md](docs/DISTRIBUTION.md)** for detailed installation guides and advanced options.
 
 ### Development Setup
 ```bash

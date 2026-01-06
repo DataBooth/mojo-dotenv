@@ -2,14 +2,14 @@
 
 This document describes how to package, distribute, and use mojo-dotenv in your projects.
 
-## Current State (2026-01-05)
+## Current State (2026-01-06)
 
-**Status**: Phase 2 Complete - MVP functional, ready for distribution
+**Status**: Production-ready - Near-100% python-dotenv compatibility
 
 Mojo packaging is still evolving. Currently, there are three main ways to use mojo-dotenv:
 
-1. ✅ **Source inclusion** (recommended for now)
-2. 🚧 **Compiled package** (.mojopkg) - experimental
+1. ✅ **Source inclusion** (recommended)
+2. ✅ **Compiled package** (.mojopkg) - available from releases
 3. 🔮 **Future**: Central package registry (when available)
 
 ## Option 1: Source Inclusion (Recommended)
@@ -77,34 +77,41 @@ git clone https://github.com/databooth/mojo-dotenv vendor/mojo-dotenv
 
 ## Option 2: Compiled Package (.mojopkg)
 
-**Status**: Experimental - .mojopkg format changes between Mojo versions
+**Status**: Available - Automatically built for each release
 
-### Building a Package
+### Using Pre-built Packages
+
+Pre-compiled `.mojopkg` files are automatically built and attached to each [GitHub release](https://github.com/databooth/mojo-dotenv/releases).
 
 ```bash
+# Download from latest release
+curl -L -o dotenv.mojopkg https://github.com/databooth/mojo-dotenv/releases/latest/download/dotenv.mojopkg
+
+# Or from specific version
+curl -L -o dotenv.mojopkg https://github.com/databooth/mojo-dotenv/releases/download/v0.2.0/dotenv.mojopkg
+
+# Use in your code (add to import path)
+mojo -I . your_app.mojo
+```
+
+### Building Locally
+
+```bash
+# Clone repository
+git clone https://github.com/databooth/mojo-dotenv
 cd mojo-dotenv
 
-# Build the package
-mojo package src/dotenv -o dist/dotenv.mojopkg
+# Build with pixi
+pixi run build-package
 
-# The package is now at dist/dotenv.mojopkg
+# Package is at dist/dotenv.mojopkg
 ```
 
-### Using a Compiled Package
+**⚠️ Important**: `.mojopkg` files are tied to specific Mojo versions. Each release includes the Mojo version used to build it. A package built with Mojo 2025.1 may not work with 2026.x. **Source installation is recommended for maximum compatibility.**
 
-```bash
-# Download or copy the .mojopkg file
-curl -L -o dotenv.mojopkg https://github.com/databooth/mojo-dotenv/releases/download/v0.1.0/dotenv.mojopkg
-
-# Use it (exact method TBD - Mojo packaging evolving)
-# Add to your import path or install location
-```
-
-**⚠️ Warning**: .mojopkg files are **not portable** across Mojo versions. A package built with Mojo 0.26.1 may not work with 0.26.2 or 0.27.0. This is a known limitation as Mojo approaches 1.0.
-
-**Current challenges:**
-- Binary format changes between versions
-- No standard installation location
+**Current limitations:**
+- Format may change between Mojo versions
+- No standard installation location yet
 - No dependency resolution
 
 ## Option 3: Future Package Management
@@ -144,11 +151,11 @@ Example `DEPENDENCIES.md` in your project:
 # Dependencies
 
 ## mojo-dotenv
-- **Version**: v0.1.0
+- **Version**: v0.2.0
 - **Repository**: https://github.com/databooth/mojo-dotenv
-- **Commit**: 37c2737
+- **Commit**: 677acfe
 - **Method**: Git submodule at vendor/mojo-dotenv
-- **Mojo version**: 0.26.1.0
+- **Mojo version**: 2025/2026
 ```
 
 ## Versioning & Compatibility
@@ -156,16 +163,14 @@ Example `DEPENDENCIES.md` in your project:
 ### mojo-dotenv Versioning
 
 We follow [Semantic Versioning](https://semver.org/):
-- **v0.1.x**: MVP releases (Phase 1 & 2 complete)
-- **v0.2.x**: Advanced features (Phase 3)
-- **v0.3.x**: Production hardening (Phase 4)
-- **v1.0.0**: Stable API, production ready
+- **v0.2.x**: Current - Production-ready with advanced features
+- **v0.3.x**: Planned - Additional features (multiple files, stream input)
+- **v1.0.0**: Future - Stable API guarantee
 
 ### Mojo Compatibility
-
 | mojo-dotenv | Mojo Versions | Status |
 |-------------|---------------|--------|
-| v0.1.0      | 0.26.1+       | ✅ Tested |
+| v0.2.0      | 2025/2026     | ✅ Tested |
 | v0.1.0      | 0.27.0        | 🔄 TBD |
 
 **Breaking changes**: We will clearly document Mojo version requirements and any breaking changes in release notes.
@@ -174,16 +179,18 @@ We follow [Semantic Versioning](https://semver.org/):
 
 ### For Maintainers
 
-1. **Update version** in README, PLAN.md
+1. **Update version** in README, pixi.toml
 2. **Run full test suite**: `pixi run test-all`
-3. **Update CHANGELOG.md**
-4. **Create git tag**: `git tag -a v0.1.0 -m "Release v0.1.0"`
-5. **Push tag**: `git push origin v0.1.0`
-6. **Create GitHub release** with:
+3. **Update CHANGELOG.md** and **COMMUNITY_ANNOUNCEMENTS.md**
+4. **Commit changes**: `git commit -am "Release v0.2.x"`
+5. **Create git tag**: `git tag -a v0.2.x -m "Release v0.2.x"`
+6. **Push changes and tag**: `git push origin main --tags`
+7. **Create GitHub release**:
    - Source code (automatic)
    - CHANGELOG excerpt
    - Installation instructions
-   - (Optional) Compiled .mojopkg with Mojo version note
+   - `.mojopkg` automatically built and attached by GitHub Action
+   - Action includes Mojo version in release notes
 
 ### For Users
 
