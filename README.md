@@ -282,7 +282,8 @@ pixi run example-simple
 ### Documentation
 - [PLAN.md](PLAN.md) - Detailed project plan and roadmap
 - [CREDITS.md](CREDITS.md) - Acknowledgments and project history
-- [docs/DISTRIBUTION.md](docs/DISTRIBUTION.md) - **Packaging and distribution guide**
+- [Building mojo-dotenv](https://www.databooth.com.au/posts/mojo/building-mojo-dotenv/) - **Blog post: lessons from building the package**
+- [docs/DISTRIBUTION.md](docs/DISTRIBUTION.md) - Packaging and distribution guide
 - [docs/MOJO_PACKAGE_MANAGEMENT.md](docs/MOJO_PACKAGE_MANAGEMENT.md) - Mojo packaging ecosystem overview
 - [docs/RESEARCH.md](docs/RESEARCH.md) - python-dotenv API analysis and testing
 - [docs/MOJOENV_COMPATIBILITY_ANALYSIS.md](docs/MOJOENV_COMPATIBILITY_ANALYSIS.md) - mojoenv compatibility findings

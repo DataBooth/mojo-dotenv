@@ -1,8 +1,10 @@
 # Building mojo-dotenv 🔥: Modern Configuration Management for Mojo
 
-*Bringing the beloved .env pattern to Mojo with near-100% python-dotenv compatibility*
+*Lessons from building my first production Mojo package: bringing the beloved .env pattern to Mojo with near-100% python-dotenv compatibility*
 
-2026-01-05
+**Published**: https://www.databooth.com.au/posts/mojo/building-mojo-dotenv/
+
+2026-01-06
 
 ---
 
@@ -223,7 +225,9 @@ Known differences (by design):
 - Stream input not supported (file paths only)  
 - UTF-8 only (Mojo default)
 
-**Test coverage:** 10 test files, 50+ test cases, including Python interop validation.
+**Test coverage:** 10 test files, 42 test cases using Mojo's TestSuite framework, including Python interop validation.
+
+**Distribution:** Submitted to [modular-community](https://github.com/modular/modular-community/pull/192) for official package distribution via pixi.
 
 ## Key Lessons for Building Mojo Libraries
 
@@ -282,6 +286,16 @@ For businesses moving production workloads to Mojo, configuration management isn
 mojo-dotenv provides all this whilst maintaining Python-dotenv compatibility. Your ops team doesn't need to learn new patterns; your Mojo services just work.
 
 ## Try It Yourself
+
+**Easiest: Official Package (Coming Soon)**
+
+mojo-dotenv has been [submitted to modular-community](https://github.com/modular/modular-community/pull/192), the official Modular package channel. Once merged:
+
+```bash
+pixi add mojo-dotenv
+```
+
+**Current: Git Submodule**
 
 ```bash
 # Add to your project via git submodule

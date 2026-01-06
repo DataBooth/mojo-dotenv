@@ -67,6 +67,7 @@ This project builds on:
 **Production-ready** ✅ - Near-100% python-dotenv compatibility with advanced features
 
 **Repository**: https://github.com/databooth/mojo-dotenv  
+**Blog post**: https://www.databooth.com.au/posts/mojo/building-mojo-dotenv/  
 **License**: MIT License
 
 ## Installation
@@ -169,8 +170,9 @@ Or see distribution guide for other methods.
 - python-dotenv (reference implementation)
 - mojoenv by @itsdevcoffee (inspired this modern rewrite)
 
-**Repository:** https://github.com/databooth/mojo-dotenv
-**License:** MIT License
+**Repository:** https://github.com/databooth/mojo-dotenv  
+**Blog post:** https://www.databooth.com.au/posts/mojo/building-mojo-dotenv/  
+**License:** MIT License  
 **Status:** Production-ready with advanced features
 
 PRs and feedback welcome! 🚀
@@ -193,7 +195,8 @@ Load .env files in @Modular_AI Mojo - 98%+ compatible with python-dotenv
 ✅ 42 tests with TestSuite
 ✅ Modern Mojo 2025/2026
 
-📦 https://github.com/databooth/mojo-dotenv
+📦 https://github.com/databooth/mojo-dotenv  
+📝 https://www.databooth.com.au/posts/mojo/building-mojo-dotenv/
 
 #MojoLang #ModularML
 ```

@@ -67,9 +67,9 @@ Submit PRs to these curated lists:
 - **Tags**: #Mojo #Modular #OpenSource #ProgrammingLanguages
 
 ### 7. DataBooth Blog
-- ⏳ Publish technical blog post
+- ✅ Published technical blog post
+- **URL**: https://www.databooth.com.au/posts/mojo/building-mojo-dotenv/
 - **Draft**: `blog_post.md` in repository root
-- **URL**: https://www.databooth.com.au (when published)
 
 ## Pre-Release Checklist
 
