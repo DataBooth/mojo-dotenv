@@ -2,7 +2,7 @@
 
 A modern `.env` file parser and loader for Mojo, compatible with Mojo 2025/2026.
 
-> **Status:** ✅ **Phase 3+ Complete** - Advanced features, near-100% python-dotenv compatibility
+> **Status:** ✅ **Production-ready** - Advanced features, near-100% python-dotenv compatibility
 
 ## Overview
 
@@ -50,7 +50,7 @@ This project was inspired by [mojoenv](https://github.com/itsdevcoffee/mojoenv) 
 - [x] Keys without `=` (returns empty string)
 - [x] Verbose mode for debugging
 - [x] 98%+ compatibility with python-dotenv
-- [x] Comprehensive test suite (8 test files)
+- [x] Comprehensive test suite (42 tests across 10 test files)
 
 ### Planned (v0.3.0+)
 - [ ] Multiple .env files with precedence
@@ -258,7 +258,7 @@ DataBooth transforms raw data into actionable strategies that drive growth, redu
 
 This project builds on excellent prior work:
 
-- **[python-dotenv](https://github.com/theskumar/python-dotenv)** by Saurabh Kumar - Reference implementation and compatibility target. We validate against python-dotenv 1.2.1 and maintain 95%+ compatibility.
+- **[python-dotenv](https://github.com/theskumar/python-dotenv)** by Saurabh Kumar - Reference implementation and compatibility target. We validate against python-dotenv 1.2.1 and maintain 98%+ compatibility.
 - **[mojoenv](https://github.com/itsdevcoffee/mojoenv)** by itsdevcoffee - Pioneer of `.env` support in Mojo (2023). Inspired this modern rewrite.
 - **Modular Team** - For creating the Mojo programming language
 

@@ -37,8 +37,8 @@ echo "=== All Tests Complete! ==="
 '"""
 
 # Build tasks
-build = "mkdir -p dist && mojo package src/dotenv -o dist/dotenv.mojopkg"
-clean = "rm -rf dist __pycache__ .pytest_cache"
+build-package = "mkdir -p dist && mojo package src/dotenv -o dist/dotenv.mojopkg"
+clean = "rm -rf dist __pycache__ .pytest_cache dotenv.mojopkg"
 
 # Example tasks
 example-simple = "mojo -I src examples/simple.mojo"
