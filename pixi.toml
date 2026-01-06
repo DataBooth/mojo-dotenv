@@ -23,6 +23,7 @@ test-phase3plus = "mojo -I src tests/test_phase3plus.mojo"
 test-override = "mojo -I src tests/test_override.mojo"
 test-helpers = "mojo -I src tests/test_helpers.mojo"
 test-compat = "mojo -I src tests/test_python_compat.mojo"
+test-missing = "mojo -I src tests/test_missing_files.mojo"
 
 # Run all tests
 test-all = """bash -c '

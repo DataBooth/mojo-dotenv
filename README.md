@@ -50,7 +50,7 @@ This project was inspired by [mojoenv](https://github.com/itsdevcoffee/mojoenv) 
 - [x] Keys without `=` (returns empty string)
 - [x] Verbose mode for debugging
 - [x] 98%+ compatibility with python-dotenv
-- [x] Comprehensive test suite (42 tests across 10 test files)
+- [x] Comprehensive test suite (49 tests across 11 test files)
 
 ### Planned (v0.3.0+)
 - [ ] Multiple .env files with precedence

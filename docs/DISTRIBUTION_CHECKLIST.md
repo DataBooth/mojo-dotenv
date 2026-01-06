@@ -38,15 +38,19 @@ This document tracks all distribution channels for sharing mojo-dotenv with the 
 Submit PRs to these curated lists:
 
 #### Primary Target: mojicians/awesome-mojo
-- ⏳ Fork repository: `gh repo fork mojicians/awesome-mojo --clone`
-- ⏳ Create PR using template in `docs/AWESOME_MOJO_SUBMISSION.md`
-- **Section**: Libraries > Configuration & Environment (or similar)
+- ✅ Fork repository: Mjboothaus/awesome-mojo
+- ✅ Create PR using template in `docs/AWESOME_MOJO_SUBMISSION.md`
+- ✅ PR #41 submitted: https://github.com/mojicians/awesome-mojo/pull/41
+- 🔄 **Status**: Awaiting review/merge
+- **Section**: Libraries > System
 - **URL**: https://github.com/mojicians/awesome-mojo
 
 #### Secondary Targets:
-- ⏳ **ego/awesome-mojo**: https://github.com/ego/awesome-mojo
-- ⏳ **mfranzon/mojo-is-awesome**: https://github.com/mfranzon/mojo-is-awesome
-- ⏳ **coderonion/awesome-mojo-max-mlir**: https://github.com/coderonion/awesome-mojo-max-mlir
+- ❌ **ego/awesome-mojo**: https://github.com/ego/awesome-mojo (Tutorial/benchmark repo, no libraries section)
+- ❌ **mfranzon/mojo-is-awesome**: https://github.com/mfranzon/mojo-is-awesome (Minimal repo, no libraries section)
+- ✅ **coderonion/awesome-mojo-max-mlir**: PR #1 submitted to File Processing section
+  - https://github.com/coderonion/awesome-mojo-max-mlir/pull/1
+  - 🔄 **Status**: Awaiting review/merge
 
 ### 5. Modular Discord
 - ⏳ Post to `#community-packages` or `#show-and-tell` channel
