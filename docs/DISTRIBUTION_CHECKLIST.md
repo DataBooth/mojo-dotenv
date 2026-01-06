@@ -25,12 +25,13 @@ This document tracks all distribution channels for sharing mojo-dotenv with the 
 
 **This is the official Modular-hosted package channel** - highest priority!
 
-- ⏳ Fork repository: `gh repo fork modular/modular-community --clone`
-- ⏳ Create rattler-build recipe (see `docs/MODULAR_COMMUNITY_SUBMISSION.md`)
-- ⏳ Test locally with rattler-build
-- ⏳ Submit PR
+- ✅ Fork repository: Mjboothaus/modular-community
+- ✅ Create rattler-build recipe
+- ✅ Submit PR: https://github.com/modular/modular-community/pull/192
+- 🔄 **Status**: Awaiting review/merge
 - **URL**: https://github.com/modular/modular-community
 - **Benefit**: Users can install with `pixi add mojo-dotenv`
+- **Script**: `pixi run submit-modular-community` (for future updates)
 
 ### 4. awesome-mojo Lists (GitHub)
 
@@ -165,8 +166,10 @@ gh pr create --title "Add mojo-dotenv - .env file loader for Mojo" \
 
 - **Forum Post**: Already visible at https://forum.modular.com/c/community-showcase/8
 - **Modverse Blog**: Modular may feature projects from Community Showcase in their blog
+- **modular-community**: PR #192 submitted, awaiting review
 - **Package Manager**: When Mojo gets official package manager, register there
 - **Documentation**: Keep all announcement templates in sync with features
+- **License**: MIT for v0.2.0; Apache 2.0 under consideration for future versions
 
 ## Success Metrics
 
