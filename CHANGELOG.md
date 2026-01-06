@@ -14,6 +14,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Performance optimizations for large files
 - Enhanced error messages with line numbers
 
+## [0.2.1] - 2026-01-06
+
+### Changed
+- **Improved missing file handling**: `dotenv_values()` now returns empty dict with WARNING instead of raising error (matches python-dotenv behavior)
+- **Better error visibility**: Added WARNING message when .env file not found
+- **Updated documentation**: README examples now show proper error handling patterns
+- **Added stdlib differences section**: Documented that Mojo's `getenv()` returns empty string vs Python's `None`
+
+### Added
+- 7 new tests for missing file scenarios (total: 49 tests across 11 test files)
+- Examples showing safe key access with `dict.get(key, default)`
+- Side-by-side Python/Mojo comparison in documentation
+
+### Fixed
+- README examples that would crash on missing files or keys
+- Test expectations to match new graceful error handling
+
 ## [0.2.0] - 2026-01-05
 
 ### Added - Phase 3+ Complete ✅
