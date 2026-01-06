@@ -63,7 +63,26 @@ See [PLAN.md](PLAN.md) for detailed roadmap.
 
 Choose the installation method that best fits your workflow:
 
-### Option 1: Git Submodule (Recommended)
+### Option 1: pixi (Recommended - Coming Soon)
+
+Easiest method using the official modular-community channel.
+
+```bash
+# Add modular-community channel to your pixi.toml
+[project]
+channels = [
+  "conda-forge",
+  "https://conda.modular.com/max",
+  "https://repo.prefix.dev/modular-community"
+]
+
+# Install mojo-dotenv
+pixi add mojo-dotenv
+```
+
+> **Status**: [PR #192](https://github.com/modular/modular-community/pull/192) submitted, pending review. Once merged, this will be the preferred installation method.
+
+### Option 2: Git Submodule
 
 Best for version-controlled projects with easy updates.
 
@@ -79,7 +98,7 @@ mojo -I vendor/mojo-dotenv/src your_app.mojo
 git submodule update --remote vendor/mojo-dotenv
 ```
 
-### Option 2: Direct Copy
+### Option 3: Direct Copy
 
 Simplest method for quick projects.
 
@@ -92,7 +111,7 @@ cp -r mojo-dotenv/src/dotenv your-project/lib/dotenv
 mojo -I your-project/lib your_app.mojo
 ```
 
-### Option 3: Compiled Package (.mojopkg)
+### Option 4: Compiled Package (.mojopkg)
 
 Pre-compiled packages available from [GitHub Releases](https://github.com/databooth/mojo-dotenv/releases).
 
