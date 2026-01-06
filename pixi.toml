@@ -40,6 +40,9 @@ echo "=== All Tests Complete! ==="
 build-package = "mkdir -p dist && mojo package src/dotenv -o dist/dotenv.mojopkg"
 clean = "rm -rf dist __pycache__ .pytest_cache dotenv.mojopkg"
 
+# Distribution tasks
+submit-modular-community = "bash scripts/submit-to-modular-community.sh"
+
 # Example tasks
 example-simple = "mojo -I src examples/simple.mojo"
 
