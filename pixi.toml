@@ -47,9 +47,14 @@ submit-modular-community = "bash scripts/submit-to-modular-community.sh"
 # Example tasks
 example-simple = "mojo -I src examples/simple.mojo"
 
+# Code quality tasks
+pre-commit = "pre-commit run --all-files"
+pre-commit-install = "pre-commit install"
+
 # Validation tasks
 check-mojoenv = "cd ../mojoenv && mojo main.mojo"
 
 [dependencies]
 mojo = ">=0.26.1.0.dev2026010405,<0.27"
 python-dotenv = ">=1.2.1,<2"
+pre-commit = ">=4.5.1,<5"

@@ -2,6 +2,8 @@
 *.mojopkg
 __pycache__/
 .mojo_cache/
+kgen.trace*
+tmp_*
 
 # Python
 *.py[cod]

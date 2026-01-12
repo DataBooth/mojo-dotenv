@@ -9,7 +9,7 @@ def test_load_dotenv_basic():
     """Test loading .env file into environment."""
     var success = load_dotenv("tests/fixtures/basic.env")
     assert_true(success, "Failed to load .env file")
-    
+
     # Check that environment variables were set
     assert_equal(getenv("KEY1"), "value1")
     assert_equal(getenv("DATABASE_URL"), "postgresql://localhost/db")

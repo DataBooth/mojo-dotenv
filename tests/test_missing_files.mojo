@@ -32,7 +32,7 @@ def test_find_dotenv_missing_raises():
         _ = find_dotenv("absolutely_does_not_exist.env", raise_error_if_not_found=True)
     except:
         raised = True
-    
+
     assert_true(raised, "Should raise error when raise_error_if_not_found=True")
 
 
@@ -46,11 +46,11 @@ def test_load_dotenv_missing_does_not_affect_env():
     """Test that loading non-existent file doesn't affect existing environment."""
     # Set a known environment variable
     _ = setenv("TEST_EXISTING_VAR", "original_value")
-    
+
     # Try to load non-existent file
     var success = load_dotenv("tests/fixtures/missing_file.env")
     assert_false(success, "Should return False")
-    
+
     # Verify existing environment variable unchanged
     var value = getenv("TEST_EXISTING_VAR")
     assert_equal(value, "original_value", "Existing env var should be unchanged")

@@ -7,7 +7,7 @@ from dotenv import dotenv_values
 def test_export_prefix():
     """Test that export prefix is stripped correctly."""
     var result = dotenv_values("tests/fixtures/export.env")
-    
+
     assert_equal(result["KEY1"], "value1")
     assert_equal(result["KEY2"], "quoted value")
     assert_equal(result["KEY3"], "no_export")

@@ -10,13 +10,13 @@ fn test_fixture_against_python(fixture_path: String) raises:
     var mojo_result = dotenv_values(fixture_path)
     var py = Python.import_module("dotenv")
     var py_result = py.dotenv_values(fixture_path)
-    
+
     # Compare each key that exists in both
     for item in mojo_result.items():
         var key = item.key
         var mojo_val = item.value
         var py_key = PythonObject(key)
-        
+
         if py_result.__contains__(py_key):
             var py_val_obj = py_result[py_key]
             # Python-dotenv returns None for some edge cases, Mojo returns empty string

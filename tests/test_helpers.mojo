@@ -42,7 +42,7 @@ def test_empty_file():
     var empty_path = "/tmp/empty_test.env"
     with open(empty_path, "w") as f:
         pass
-    
+
     var result = dotenv_values(empty_path)
     assert_equal(len(result), 0)
 
@@ -55,7 +55,7 @@ def test_comments_only_file():
         f.write("  # Another comment\n")
         f.write("\n")
         f.write("# More comments\n")
-    
+
     var result = dotenv_values(comments_path)
     assert_equal(len(result), 0)
 
@@ -66,7 +66,7 @@ def test_inline_comments_respect_quotes():
     with open(inline_path, "w") as f:
         f.write('QUOTED="value # not a comment"\n')
         f.write('UNQUOTED=value # this is a comment\n')
-    
+
     var result = dotenv_values(inline_path)
     assert_equal(result["QUOTED"], "value # not a comment")
     assert_equal(result["UNQUOTED"], "value")

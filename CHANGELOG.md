@@ -160,6 +160,7 @@ Before tagging a release:
 
 ## Version History
 
+- **v0.2.1** (2026-01-06): Improved error handling - graceful missing file behavior
 - **v0.2.0** (2026-01-05): Phase 3+ complete - Advanced features, near-100% python-dotenv compatibility
 - **v0.1.0** (2026-01-05): Phase 1 & 2 MVP complete
 - **v0.0.0** (2026-01-04): Phase 0 research & setup

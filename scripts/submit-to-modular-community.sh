@@ -25,7 +25,7 @@ else
     # Create work directory
     mkdir -p "$WORK_DIR"
     cd "$WORK_DIR"
-    
+
     echo "🔀 Forking and cloning modular-community repository..."
     if [ -d "modular-community" ]; then
         echo "   Existing clone found, pulling latest..."
@@ -97,7 +97,7 @@ about:
   summary: Load environment variables from .env files in Mojo
   description: |
     A production-ready .env file parser and loader for Mojo with near-100% python-dotenv compatibility.
-    
+
     Features:
     - Parse .env files to Dict or load into environment
     - Variable expansion (\${VAR} and \$VAR syntax)
@@ -116,13 +116,13 @@ from dotenv import dotenv_values, load_dotenv
 fn main() raises:
     # Basic smoke test
     print("Testing mojo-dotenv import...")
-    
+
     # Test that functions exist and are callable
     # Note: We can't actually load files in the test environment
     # but we can verify the functions are importable
     print("✓ dotenv_values imported")
     print("✓ load_dotenv imported")
-    
+
     print("All import tests passed!")
 EOF
 

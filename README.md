@@ -35,7 +35,7 @@ This project was inspired by [mojoenv](https://github.com/itsdevcoffee/mojoenv) 
 
 ## Features
 
-### Current (v0.2.0 - Near-100% python-dotenv Compatible)
+### Current (v0.2.1 - Near-100% python-dotenv Compatible)
 - [x] Parse `KEY=value` pairs
 - [x] Handle comments (`#` lines and inline comments)
 - [x] Handle quotes (`"value"`, `'value'`)
@@ -57,7 +57,7 @@ This project was inspired by [mojoenv](https://github.com/itsdevcoffee/mojoenv) 
 - [ ] Stream input support
 - [ ] Custom encoding options
 
-See [PLAN.md](PLAN.md) for detailed roadmap.
+See [docs/planning/PLAN.md](docs/planning/PLAN.md) for detailed roadmap.
 
 ## Installation
 
@@ -80,7 +80,7 @@ channels = [
 pixi add mojo-dotenv
 ```
 
-> **Status**: [PR #192](https://github.com/modular/modular-community/pull/192) submitted, pending review. Once merged, this will be the preferred installation method.
+> **Status**: [PR #192](https://github.com/modular/modular-community/pull/192) in review. Once merged, this will be the preferred installation method.
 
 ### Option 2: Git Submodule
 
@@ -284,7 +284,7 @@ mojo-dotenv/
 ├── tests/               # Tests
 ├── examples/            # Examples
 ├── docs/                # Documentation
-├── PLAN.md              # Detailed project plan
+│   └── planning/        # Project planning docs
 └── README.md            # This file
 ```
 
@@ -314,7 +314,7 @@ pixi run example-simple
 ```
 
 ### Documentation
-- [PLAN.md](PLAN.md) - Detailed project plan and roadmap
+- [docs/planning/PLAN.md](docs/planning/PLAN.md) - Detailed project plan and roadmap
 - [CREDITS.md](CREDITS.md) - Acknowledgments and project history
 - [Building mojo-dotenv](https://www.databooth.com.au/posts/mojo/building-mojo-dotenv/) - **Blog post: lessons from building the package**
 - [docs/DISTRIBUTION.md](docs/DISTRIBUTION.md) - Packaging and distribution guide
@@ -358,5 +358,5 @@ MIT License - See [LICENSE](LICENSE) for details.
 ## Links
 
 - [GitHub Repository](https://github.com/databooth/mojo-dotenv)
-- [Project Plan](PLAN.md)
+- [Project Plan](docs/planning/PLAN.md)
 - [Mojo Documentation](https://docs.modular.com/mojo/)
