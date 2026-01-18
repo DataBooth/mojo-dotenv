@@ -324,7 +324,7 @@ pixi run example-simple
 
 ## Contributing
 
-Contributions welcome! This is an open-source project (MIT License).
+Contributions welcome! This is an open-source project (Apache 2.0 License).
 
 ### Ways to Contribute
 - Report bugs or request features
@@ -353,7 +353,7 @@ See **[CREDITS.md](CREDITS.md)** for detailed acknowledgments and project histor
 
 ## License
 
-MIT License - See [LICENSE](LICENSE) for details.
+Apache 2.0 License - See [LICENSE](LICENSE) for details.
 
 ## Links
 
