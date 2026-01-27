@@ -2,6 +2,8 @@
 
 A modern `.env` file parser and loader for Mojo, compatible with Mojo 2025/2026.
 
+[![CodeQL](https://github.com/DataBooth/mojo-dotenv/workflows/CodeQL/badge.svg)](https://github.com/DataBooth/mojo-dotenv/actions/workflows/codeql.yml)
+
 > **Status:** ✅ **Production-ready** - Advanced features, near-100% python-dotenv compatibility
 
 ## Overview
