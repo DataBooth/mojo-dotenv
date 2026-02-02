@@ -37,7 +37,7 @@ clean = "rm -rf dist __pycache__ .pytest_cache dotenv.mojopkg"
 submit-modular-community = "bash scripts/submit-to-modular-community.sh"
 
 # Example tasks
-example-simple = "mojo -I src examples/simple.mojo"
+examples-all = "python scripts/run_examples.py"
 
 # Code quality tasks
 pre-commit = "pre-commit run --all-files"

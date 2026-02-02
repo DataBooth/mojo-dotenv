@@ -162,6 +162,17 @@ def check_tests() -> CheckResult:
     return CheckResult("Full test suite", False, "Tests failed")
 
 
+def check_examples() -> CheckResult:
+    section("CHECK 2: Running examples (pixi run examples-all)")
+    cp = run_command(["pixi", "run", "examples-all"], check_name="Examples")
+    if cp.returncode == 0:
+        success("All examples ran successfully")
+        return CheckResult("Examples", True, "All examples ran successfully")
+    msg = "Examples run failed"
+    error(msg)
+    return CheckResult("Examples", False, msg)
+
+
 def check_recipe_validation() -> CheckResult:
     section("CHECK 2: Validating recipe schema")
 
@@ -559,6 +570,7 @@ def main(argv: list[str] | None = None) -> int:
 
     # Run checks sequentially to preserve readable output ordering
     all_results.append(check_tests())
+    all_results.append(check_examples())
     all_results.append(check_recipe_validation())
     all_results.extend(check_build_and_artifacts())
     all_results.extend(check_git_tag())
