@@ -1,4 +1,4 @@
-[workspace]
+[project]
 authors = ["Michael Booth <michael@databooth.com.au>"]
 channels = ["conda-forge", "https://conda.modular.com/max"]
 name = "mojo-dotenv"
