@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Bumped MAX / Mojo toolchain dependency to `max ">=26.1.0,<27"` and updated recipes to pin `mojo_version = "=0.26.1"`.
+- Updated parser string handling to use `codepoint_slices()` and `List[String]` helpers instead of direct `String` indexing, matching Mojo 0.26.1 `__getitem__` semantics while preserving python-dotenv compatibility.
+- Adopted a "no warnings" policy for the core library and tests so future migrations surface only new issues.
+
 ### Planned for v0.3.0
 - Multiple .env file support with precedence handling
 - Stream input support (reading from StringRef/file handles)

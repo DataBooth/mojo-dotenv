@@ -35,6 +35,10 @@ Tracked in main [README.md](README.md):
 ✅ **Completed (2026-01-29)**
 - Standardized to `mojo_version: "=0.25.7"` context variable
 
+### Testing / Compatibility TODOs
+- Clarify in `tests/test_python_compat.mojo` that python-dotenv warnings like "could not parse statement starting at line 6/8" are expected for deliberately malformed fixtures (e.g. `edge_cases.env`).
+- Improve missing-file tests in `tests/test_missing_files.mojo` so that expected warning lines are captured/asserted (or clearly labelled as expected) rather than just printed as "Expected output" plus the raw warning.
+
 ---
 
-**Last updated:** 2026-01-29
+**Last updated:** 2026-02-02

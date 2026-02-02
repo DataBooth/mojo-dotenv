@@ -1,8 +1,8 @@
 [workspace]
 authors = ["Michael Booth <michael@databooth.com.au>"]
-channels = ["conda-forge", "https://conda.modular.com/max-nightly"]
+channels = ["conda-forge", "https://conda.modular.com/max"]
 name = "mojo-dotenv"
-platforms = ["osx-arm64", "linux-64"]
+platforms = ["linux-64", "linux-aarch64", "osx-arm64"]
 version = "0.2.1"
 
 [activation]
@@ -25,17 +25,9 @@ test-helpers = "mojo -I src tests/test_helpers.mojo"
 test-compat = "mojo -I src tests/test_python_compat.mojo"
 test-missing = "mojo -I src tests/test_missing_files.mojo"
 
-# Run all tests
-test-all = """bash -c '
-set -e
-echo "=== Running All Tests ==="
-for test_file in tests/test_*.mojo; do
-  echo ""
-  mojo -I src "$test_file"
-done
-echo ""
-echo "=== All Tests Complete! ==="
-'"""
+# Test tasks
+# Run all tests (auto-discovers tests/test_*.mojo via scripts/run_tests.py)
+test-all = "python scripts/run_tests.py"
 
 # Build tasks
 build-package = "mkdir -p dist && mojo package src/dotenv -o dist/dotenv.mojopkg"
@@ -54,7 +46,17 @@ pre-commit-install = "pre-commit install"
 # Validation tasks
 check-mojoenv = "cd ../mojoenv && mojo main.mojo"
 
+# Release / validation tasks
+validate-recipe = "./scripts/validate-recipe.sh recipe.yaml"
+pre-submit = "python scripts/pre_submit_checklist.py"
+pre-submit-modular-community = "python scripts/pre_submit_checklist.py"
+
+# External integration tasks
+clone-modular-community = "mkdir -p ~/code/github/external && cd ~/code/github/external && git clone https://github.com/modular-community/modular-community.git || (cd modular-community && git pull)"
+
 [dependencies]
-mojo = ">=0.26.1.0.dev2026010405,<0.27"
+max = ">=26.1.0,<27"
+python = ">=3.11,<4"
 python-dotenv = ">=1.2.1,<2"
 pre-commit = ">=4.5.1,<5"
+rattler-build = ">=0.55.1,<0.56"

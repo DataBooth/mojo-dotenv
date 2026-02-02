@@ -3,23 +3,42 @@
 This module provides functions to parse .env file lines and extract key-value pairs.
 """
 
-from collections import Dict, Optional
+from collections import Dict, Optional, List
 from os import getenv
 
 
+fn to_chars(text: String) -> List[String]:
+    """Convert a String into a list of single-codepoint Strings."""
+    var chars = List[String]()
+    for slice in text.codepoint_slices():
+        chars.append(String(slice))
+    return chars^
+
+
+fn join_chars(chars: List[String], start: Int, end: Int) -> String:
+    """Join a slice of character list [start, end) into a String."""
+    var result = String("")
+    var i = start
+    while i < end:
+        result += chars[i]
+        i += 1
+    return result
+
+
 fn count_trailing_backslashes(text: String, end_pos: Int) -> Int:
-    """Count consecutive backslashes before the given position.
+    """Count consecutive backslashes before the given character position.
 
     Args:
         text: String to examine.
-        end_pos: Position to count backwards from (exclusive).
+        end_pos: Character position to count backwards from (exclusive).
 
     Returns:
         Number of consecutive backslashes.
     """
+    var chars = to_chars(text)
     var count = 0
     var idx = end_pos - 1
-    while idx >= 0 and text[idx] == "\\":
+    while idx >= 0 and chars[idx] == "\\":
         count += 1
         idx -= 1
     return count
@@ -57,19 +76,24 @@ fn strip_inline_comment(line: String) -> String:
     Returns:
         Line with inline comment removed.
     """
+    var chars = to_chars(line)
     var in_single_quote = False
     var in_double_quote = False
     var escaped = False
 
-    for i in range(len(line)):
-        var c = line[i]
+    var i = 0
+    var n = len(chars)
+    while i < n:
+        var c = chars[i]
 
         if escaped:
             escaped = False
+            i += 1
             continue
 
         if c == "\\":
             escaped = True
+            i += 1
             continue
 
         if c == "'" and not in_double_quote:
@@ -78,7 +102,9 @@ fn strip_inline_comment(line: String) -> String:
             in_double_quote = not in_double_quote
         elif c == "#" and not in_single_quote and not in_double_quote:
             # Found unquoted comment
-            return String(line[:i])
+            return join_chars(chars, 0, i)
+
+        i += 1
 
     return line
 
@@ -99,53 +125,58 @@ fn expand_variables(value: String, env_dict: Dict[String, String]) raises -> Str
     Returns:
         String with variables expanded.
     """
+    var chars = to_chars(value)
     var result = String("")
     var i = 0
-    var len_val = len(value)
+    var n = len(chars)
 
-    while i < len_val:
-        if value[i] == "$":
-            if i + 1 < len_val and value[i + 1] == "{":
+    while i < n:
+        if chars[i] == "$":
+            if i + 1 < n and chars[i + 1] == "{":
                 # ${VAR} syntax
                 var closing = -1
-                for j in range(i + 2, len_val):
-                    if value[j] == "}":
+                var j = i + 2
+                while j < n:
+                    if chars[j] == "}":
                         closing = j
                         break
+                    j += 1
 
                 if closing != -1:
-                    var var_name = String(value[i + 2:closing])
-                    result += lookup_variable(var_name, env_dict, String(value[i:closing + 1]))
+                    var var_name = join_chars(chars, i + 2, closing)
+                    var literal = join_chars(chars, i, closing + 1)
+                    result += lookup_variable(var_name, env_dict, literal)
                     i = closing + 1
                 else:
-                    # No closing brace, keep literal
-                    result += String(value[i])
+                    # No closing brace, keep literal '$'
+                    result += chars[i]
                     i += 1
-            elif i + 1 < len_val:
+            elif i + 1 < n:
                 # Check if next char starts a variable name (letter or underscore)
-                var next_char = value[i + 1]
+                var next_char = chars[i + 1]
                 if (next_char >= "A" and next_char <= "Z") or (next_char >= "a" and next_char <= "z") or next_char == "_":
                     # $VAR syntax (simple form)
                     var var_end = i + 1
-                    while var_end < len_val:
-                        var c = value[var_end]
+                    while var_end < n:
+                        var c = chars[var_end]
                         if not ((c >= "A" and c <= "Z") or (c >= "a" and c <= "z") or (c >= "0" and c <= "9") or c == "_"):
                             break
                         var_end += 1
 
-                    var var_name = String(value[i + 1:var_end])
-                    result += lookup_variable(var_name, env_dict, String(value[i:var_end]))
+                    var var_name = join_chars(chars, i + 1, var_end)
+                    var literal = join_chars(chars, i, var_end)
+                    result += lookup_variable(var_name, env_dict, literal)
                     i = var_end
                 else:
                     # Not a variable name, just a dollar sign
-                    result += String(value[i])
+                    result += chars[i]
                     i += 1
             else:
                 # Just a dollar sign
-                result += String(value[i])
+                result += chars[i]
                 i += 1
         else:
-            result += String(value[i])
+            result += chars[i]
             i += 1
 
     return result
@@ -167,14 +198,15 @@ fn process_escapes(value: String) -> String:
     Returns:
         String with escape sequences processed.
     """
+    var chars = to_chars(value)
     var result = String("")
     var i = 0
-    var len_val = len(value)
+    var n = len(chars)
 
-    while i < len_val:
-        if value[i] == "\\" and i + 1 < len_val:
+    while i < n:
+        if chars[i] == "\\" and i + 1 < n:
             # Escape sequence found
-            var next_char = value[i + 1]
+            var next_char = chars[i + 1]
             if next_char == "n":
                 result += "\n"
                 i += 2
@@ -191,11 +223,11 @@ fn process_escapes(value: String) -> String:
                 result += "'"
                 i += 2
             else:
-                # Unknown escape, keep backslash
-                result += String(value[i])
+                # Unknown escape, keep backslash as-is
+                result += chars[i]
                 i += 1
         else:
-            result += String(value[i])
+            result += chars[i]
             i += 1
 
     return result
@@ -211,19 +243,22 @@ fn strip_quotes(value: String) -> String:
         The string with outer quotes removed and escape sequences processed.
     """
     var v = value.strip()
-    var v_len = len(v)
+    var v_str = String(v)
+    var chars = to_chars(v_str)
+    var v_len = len(chars)
 
     if v_len < 2:
-        return String(v)
+        return v_str
 
     # Check for matching outer quotes
-    var unquoted: String
-    if (v[0] == "'" and v[v_len - 1] == "'") or (v[0] == '"' and v[v_len - 1] == '"'):
-        unquoted = String(v[1:v_len - 1])
+    var first = chars[0]
+    var last = chars[v_len - 1]
+    if (first == "'" and last == "'") or (first == '"' and last == '"'):
         # Process escape sequences only within quoted strings
+        var unquoted = join_chars(chars, 1, v_len - 1)
         return process_escapes(unquoted)
 
-    return String(v)
+    return v_str
 
 
 fn parse_line(line: String, verbose: Bool = False) -> Optional[Tuple[String, String]]:
@@ -325,13 +360,14 @@ fn parse_dotenv(content: String, verbose: Bool = False) raises -> Dict[String, S
                 var value_part = String(parts[1].strip())
 
                 # Check if value starts with quote
-                if len(value_part) > 0 and (value_part[0] == '"' or value_part[0] == "'"):
-                    var quote_char = value_part[0]
-                    var value_len = len(value_part)
+                var value_chars = to_chars(value_part)
+                var value_len = len(value_chars)
+                if value_len > 0 and (value_chars[0] == '"' or value_chars[0] == "'"):
+                    var quote_char = value_chars[0]
 
                     # Check if quote is closed on same line
                     var closed = False
-                    if value_len > 1 and value_part[value_len - 1] == quote_char:
+                    if value_len > 1 and value_chars[value_len - 1] == quote_char:
                         # Even number (or 0) of backslashes means quote is not escaped
                         if count_trailing_backslashes(value_part, value_len - 1) % 2 == 0:
                             closed = True
@@ -345,8 +381,9 @@ fn parse_dotenv(content: String, verbose: Bool = False) raises -> Dict[String, S
                             full_value += "\n" + next_line
 
                             # Check if this line closes the quote
-                            var next_len = len(next_line)
-                            if next_len > 0 and next_line[next_len - 1] == quote_char:
+                            var next_chars = to_chars(next_line)
+                            var next_len = len(next_chars)
+                            if next_len > 0 and next_chars[next_len - 1] == quote_char:
                                 # Even number (or 0) of backslashes means quote is not escaped
                                 if count_trailing_backslashes(next_line, next_len - 1) % 2 == 0:
                                     break
