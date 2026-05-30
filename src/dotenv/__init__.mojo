@@ -4,7 +4,7 @@ A modern implementation of .env file parsing for Mojo, compatible with python-do
 """
 
 from pathlib import Path
-from collections import Dict
+from std.collections import Dict
 from .parser import parse_dotenv
 from .loader import load_dotenv
 from .finder import find_dotenv

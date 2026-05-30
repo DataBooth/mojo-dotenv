@@ -47,7 +47,7 @@ pre-commit-install = "pre-commit install"
 check-mojoenv = "cd ../mojoenv && mojo main.mojo"
 
 # Release / validation tasks
-validate-recipe = "./scripts/validate-recipe.sh recipe.yaml"
+validate-recipe = "./scripts/validate-recipe.sh packaging/recipe.yaml"
 pre-submit = "python scripts/pre_submit_checklist.py"
 pre-submit-modular-community = "python scripts/pre_submit_checklist.py"
 

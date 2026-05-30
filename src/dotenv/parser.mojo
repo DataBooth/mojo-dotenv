@@ -3,7 +3,7 @@
 This module provides functions to parse .env file lines and extract key-value pairs.
 """
 
-from collections import Dict, Optional, List
+from std.collections import Dict, List, Optional
 from os import getenv
 
 

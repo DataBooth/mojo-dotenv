@@ -1,8 +1,7 @@
 """Test helper functions and edge cases."""
 
-from testing import assert_equal, assert_true
+from testing import assert_equal, assert_true, TestSuite
 from dotenv import dotenv_values, find_dotenv
-from pathlib import Path
 
 
 def test_backslash_counting():
@@ -73,7 +72,6 @@ def test_inline_comments_respect_quotes():
 
 
 def main():
-    from testing import TestSuite
     var suite = TestSuite()
     suite.test[test_backslash_counting]()
     suite.test[test_undefined_variables_remain_literal]()

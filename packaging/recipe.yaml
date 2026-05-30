@@ -1,0 +1,61 @@
+context:
+  version: "0.2.2"
+  mojo_version: "=0.26.1"
+
+package:
+  name: mojo-dotenv
+  version: ${{ version }}
+
+source:
+  git: https://github.com/DataBooth/mojo-dotenv
+  tag: v${{ version }}
+
+build:
+  number: 0
+  noarch: generic
+  script:
+    - mkdir -p $PREFIX/lib/mojo/dotenv
+    - cp -r src/dotenv/* $PREFIX/lib/mojo/dotenv/
+
+requirements:
+  build:
+    - mojo-compiler ${{ mojo_version }}
+  host:
+    - mojo-compiler ${{ mojo_version }}
+  run:
+    # Mojo bytecode is not forwards-compatible across compiler minor versions,
+    # so we require the exact compiler series used at build time.
+    - mojo-compiler ${{ mojo_version }}
+
+tests:
+  - files:
+      source:
+        - test_package.mojo
+    script:
+      # Basic sanity checks: files installed under PREFIX
+      - test -f $PREFIX/lib/mojo/dotenv/__init__.mojo
+      - test -f $PREFIX/lib/mojo/dotenv/parser.mojo
+      - test -f $PREFIX/lib/mojo/dotenv/loader.mojo
+      - test -f $PREFIX/lib/mojo/dotenv/finder.mojo
+      # Execute smoke test. In the build test environment the file lives under
+      # info/recipe/, while in the installed test-files environment it is copied
+      # next to this script. Handle both cases.
+      - if [ -f info/recipe/test_package.mojo ]; then $PREFIX/bin/mojo -I $PREFIX/lib/mojo info/recipe/test_package.mojo; else $PREFIX/bin/mojo -I $PREFIX/lib/mojo test_package.mojo; fi
+
+about:
+  homepage: https://github.com/DataBooth/mojo-dotenv
+  repository: https://github.com/DataBooth/mojo-dotenv
+  documentation: https://github.com/DataBooth/mojo-dotenv/blob/main/README.md
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: Load environment variables from .env files in Mojo
+  description: |
+    A production-ready .env file parser and loader for Mojo with near-100% python-dotenv compatibility.
+
+    Features:
+    - Parse .env files to Dict or load into environment
+    - Variable expansion (${VAR} and $VAR syntax)
+    - Multiline values and escape sequences
+    - Auto-discovery with find_dotenv()
+    - 98%+ compatible with python-dotenv
+    - 49 comprehensive tests using Mojo's TestSuite framework
