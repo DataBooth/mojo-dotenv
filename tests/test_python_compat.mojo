@@ -5,7 +5,7 @@ from dotenv import dotenv_values
 from python import Python, PythonObject
 
 
-fn test_fixture_against_python(fixture_path: String) raises:
+def test_fixture_against_python(fixture_path: String):
     """Test a fixture matches python-dotenv results."""
     var mojo_result = dotenv_values(fixture_path)
     var py = Python.import_module("dotenv")

@@ -5,7 +5,7 @@ from pathlib import Path
 from .parser import parse_dotenv
 
 
-fn load_dotenv(dotenv_path: String, override: Bool = False, verbose: Bool = False) raises -> Bool:
+def load_dotenv(dotenv_path: String, override: Bool = False, verbose: Bool = False) -> Bool:
     """Load variables from a .env file into the environment.
 
     Reads a .env file and sets all found variables as environment variables.

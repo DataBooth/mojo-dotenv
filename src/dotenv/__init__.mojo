@@ -10,7 +10,7 @@ from .loader import load_dotenv
 from .finder import find_dotenv
 
 
-fn dotenv_values(dotenv_path: String, verbose: Bool = False) raises -> Dict[String, String]:
+def dotenv_values(dotenv_path: String, verbose: Bool = False) -> Dict[String, String]:
     """Parse a .env file and return its content as a dictionary.
 
     This function reads a .env file and returns a dictionary mapping
