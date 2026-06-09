@@ -3,7 +3,7 @@
 from pathlib import Path
 
 
-fn find_dotenv(filename: String = ".env", raise_error_if_not_found: Bool = False, usecwd: Bool = False) raises -> String:
+def find_dotenv(filename: String = ".env", raise_error_if_not_found: Bool = False, usecwd: Bool = False) -> String:
     """Search in increasingly higher folders for the given file.
 
     Searches upward from the current directory (or working directory if usecwd=True)

@@ -7,7 +7,7 @@ from collections import Dict, Optional, List
 from os import getenv
 
 
-fn to_chars(text: String) -> List[String]:
+def to_chars(text: String) -> List[String]:
     """Convert a String into a list of single-codepoint Strings."""
     var chars = List[String]()
     for slice in text.codepoint_slices():
@@ -15,7 +15,7 @@ fn to_chars(text: String) -> List[String]:
     return chars^
 
 
-fn join_chars(chars: List[String], start: Int, end: Int) -> String:
+def join_chars(chars: List[String], start: Int, end: Int) -> String:
     """Join a slice of character list [start, end) into a String."""
     var result = String("")
     var i = start
@@ -25,7 +25,7 @@ fn join_chars(chars: List[String], start: Int, end: Int) -> String:
     return result
 
 
-fn count_trailing_backslashes(text: String, end_pos: Int) -> Int:
+def count_trailing_backslashes(text: String, end_pos: Int) -> Int:
     """Count consecutive backslashes before the given character position.
 
     Args:
@@ -44,7 +44,7 @@ fn count_trailing_backslashes(text: String, end_pos: Int) -> Int:
     return count
 
 
-fn lookup_variable(var_name: String, env_dict: Dict[String, String], fallback_literal: String) raises -> String:
+def lookup_variable(var_name: String, env_dict: Dict[String, String], fallback_literal: String) -> String:
     """Look up a variable in env_dict, then system environment, else return literal.
 
     Args:
@@ -65,7 +65,7 @@ fn lookup_variable(var_name: String, env_dict: Dict[String, String], fallback_li
     return fallback_literal
 
 
-fn strip_inline_comment(line: String) -> String:
+def strip_inline_comment(line: String) -> String:
     """Strip inline comments from a line.
 
     Handles # comments after values, but not within quotes.
@@ -109,7 +109,7 @@ fn strip_inline_comment(line: String) -> String:
     return line
 
 
-fn expand_variables(value: String, env_dict: Dict[String, String]) raises -> String:
+def expand_variables(value: String, env_dict: Dict[String, String]) -> String:
     """Expand variable references in a value.
 
     Supports:
@@ -182,7 +182,7 @@ fn expand_variables(value: String, env_dict: Dict[String, String]) raises -> Str
     return result
 
 
-fn process_escapes(value: String) -> String:
+def process_escapes(value: String) -> String:
     """Process escape sequences in a string.
 
     Handles:
@@ -233,7 +233,7 @@ fn process_escapes(value: String) -> String:
     return result
 
 
-fn strip_quotes(value: String) -> String:
+def strip_quotes(value: String) -> String:
     """Strip outer quotes (single or double) from a value and process escapes.
 
     Args:
@@ -261,7 +261,7 @@ fn strip_quotes(value: String) -> String:
     return v_str
 
 
-fn parse_line(line: String, verbose: Bool = False) -> Optional[Tuple[String, String]]:
+def parse_line(line: String, verbose: Bool = False) -> Optional[Tuple[String, String]]:
     """Parse a single line from a .env file.
 
     Handles:
@@ -324,7 +324,7 @@ fn parse_line(line: String, verbose: Bool = False) -> Optional[Tuple[String, Str
     return (key, value)
 
 
-fn parse_dotenv(content: String, verbose: Bool = False) raises -> Dict[String, String]:
+def parse_dotenv(content: String, verbose: Bool = False) -> Dict[String, String]:
     """Parse the entire content of a .env file.
 
     Performs two passes:
