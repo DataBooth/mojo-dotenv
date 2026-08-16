@@ -1,9 +1,9 @@
-[project]
+[workspace]
 authors = ["Michael Booth <michael@databooth.com.au>"]
 channels = ["conda-forge", "https://conda.modular.com/max"]
 name = "mojo-dotenv"
 platforms = ["linux-64", "linux-aarch64", "osx-arm64"]
-version = "0.2.1"
+version = "0.9.1"
 
 [activation]
 env = { MOJO_PATH = "$PIXI_PROJECT_ROOT/src" }
@@ -37,17 +37,17 @@ clean = "rm -rf dist __pycache__ .pytest_cache dotenv.mojopkg"
 submit-modular-community = "bash scripts/submit-to-modular-community.sh"
 
 # Example tasks
-example-simple = "mojo -I src examples/simple.mojo"
+examples-all = "python scripts/run_examples.py"
 
 # Code quality tasks
-pre-commit = "pre-commit run --all-files"
-pre-commit-install = "pre-commit install"
+prek = "prek run --all-files"
+prek-install = "prek install -f"
 
 # Validation tasks
 check-mojoenv = "cd ../mojoenv && mojo main.mojo"
 
 # Release / validation tasks
-validate-recipe = "./scripts/validate-recipe.sh recipe.yaml"
+validate-recipe = "./scripts/validate-recipe.sh packaging/recipe.yaml"
 pre-submit = "python scripts/pre_submit_checklist.py"
 pre-submit-modular-community = "python scripts/pre_submit_checklist.py"
 
@@ -55,8 +55,8 @@ pre-submit-modular-community = "python scripts/pre_submit_checklist.py"
 clone-modular-community = "mkdir -p ~/code/github/external && cd ~/code/github/external && git clone https://github.com/modular-community/modular-community.git || (cd modular-community && git pull)"
 
 [dependencies]
-max = ">=26.1.0,<27"
+mojo = "==1.0.0"
 python = ">=3.11,<4"
 python-dotenv = ">=1.2.1,<2"
-pre-commit = ">=4.5.1,<5"
+prek = ">=0.4.5,<1"
 rattler-build = ">=0.55.1,<0.56"

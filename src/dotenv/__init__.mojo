@@ -3,14 +3,14 @@
 A modern implementation of .env file parsing for Mojo, compatible with python-dotenv.
 """
 
-from pathlib import Path
-from collections import Dict
+from std.pathlib import Path
+from std.collections import Dict
 from .parser import parse_dotenv
 from .loader import load_dotenv
 from .finder import find_dotenv
 
 
-fn dotenv_values(dotenv_path: String, verbose: Bool = False) raises -> Dict[String, String]:
+def dotenv_values(dotenv_path: String, verbose: Bool = False) raises -> Dict[String, String]:
     """Parse a .env file and return its content as a dictionary.
 
     This function reads a .env file and returns a dictionary mapping

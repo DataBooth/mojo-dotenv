@@ -41,7 +41,7 @@ NC = "\033[0m"  # No colour
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT_DIR = PROJECT_ROOT / "scripts"
-RECIPE_FILE = PROJECT_ROOT / "recipe.yaml"
+RECIPE_FILE = PROJECT_ROOT / "packaging" / "recipe.yaml"
 OUTPUT_DIR = PROJECT_ROOT / "output"
 PIXl_MANIFEST = PROJECT_ROOT / "pixi.toml"
 
@@ -117,17 +117,19 @@ def run_command(
 
 
 def get_recipe_version(path: Path) -> str | None:
-    """Extract the concrete numeric version from recipe.yaml.
+    """Extract recipe version from context.version or package.version.
 
-    The file contains multiple "version" fields (context.version,
-    package.version template). We want the numeric value from the
-    context block, e.g. "0.5.1".
+    Prefer context.version when present. Ignore templated values such as
+    "${{ version }}".
     """
 
     if not path.is_file():
         return None
 
+    context_version: str | None = None
+    package_version: str | None = None
     in_context = False
+    in_package = False
     try:
         with path.open("r", encoding="utf-8") as f:
             for raw_line in f:
@@ -138,18 +140,25 @@ def get_recipe_version(path: Path) -> str | None:
                 # Top-level key
                 if not line.startswith(" "):
                     in_context = line.strip().startswith("context:")
+                    in_package = line.strip().startswith("package:")
                     continue
 
-                if in_context:
+                if in_context or in_package:
                     stripped = line.strip()
                     if stripped.startswith("version:"):
                         _, value = stripped.split(":", 1)
-                        return value.strip().strip("'\"")
+                        version = value.strip().strip("'\"")
+                        if "${{" in version:
+                            continue
+                        if in_context:
+                            context_version = version
+                        elif in_package:
+                            package_version = version
     except OSError as exc:
         error(f"Failed to read recipe file: {exc}")
         return None
 
-    return None
+    return context_version or package_version
 
 
 def check_tests() -> CheckResult:
@@ -160,6 +169,17 @@ def check_tests() -> CheckResult:
         return CheckResult("Full test suite", True, "All tests pass")
     error("Tests failed")
     return CheckResult("Full test suite", False, "Tests failed")
+
+
+def check_examples() -> CheckResult:
+    section("CHECK 2: Running examples (pixi run examples-all)")
+    cp = run_command(["pixi", "run", "examples-all"], check_name="Examples")
+    if cp.returncode == 0:
+        success("All examples ran successfully")
+        return CheckResult("Examples", True, "All examples ran successfully")
+    msg = "Examples run failed"
+    error(msg)
+    return CheckResult("Examples", False, msg)
 
 
 def check_recipe_validation() -> CheckResult:
@@ -223,7 +243,7 @@ def check_git_tag() -> List[CheckResult]:
 
     version = get_recipe_version(RECIPE_FILE)
     if not version:
-        msg = "Could not extract version from recipe.yaml"
+        msg = f"Could not extract version from {RECIPE_FILE}"
         error(msg)
         results.append(CheckResult("Git tag exists", False, msg))
         return results
@@ -559,6 +579,7 @@ def main(argv: list[str] | None = None) -> int:
 
     # Run checks sequentially to preserve readable output ordering
     all_results.append(check_tests())
+    all_results.append(check_examples())
     all_results.append(check_recipe_validation())
     all_results.extend(check_build_and_artifacts())
     all_results.extend(check_git_tag())

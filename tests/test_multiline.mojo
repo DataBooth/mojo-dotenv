@@ -1,16 +1,16 @@
 """Test multiline value support."""
 
-from testing import assert_equal, assert_true
+from std.testing import assert_equal, assert_true
 from dotenv import dotenv_values
 
 
-def test_single_line_baseline():
+def test_single_line_baseline() raises:
     """Test single line value (baseline)."""
     var result = dotenv_values("tests/fixtures/multiline.env")
     assert_equal(result["SINGLE_LINE"], "single line")
 
 
-def test_multiline_double_quotes():
+def test_multiline_double_quotes() raises:
     """Test multiline value with double quotes."""
     var result = dotenv_values("tests/fixtures/multiline.env")
     var multiline_double = result["MULTILINE_DOUBLE"]
@@ -19,7 +19,7 @@ def test_multiline_double_quotes():
     assert_equal(len(lines), 3)
 
 
-def test_multiline_single_quotes():
+def test_multiline_single_quotes() raises:
     """Test multiline value with single quotes."""
     var result = dotenv_values("tests/fixtures/multiline.env")
     var multiline_single = result["MULTILINE_SINGLE"]
@@ -28,7 +28,7 @@ def test_multiline_single_quotes():
     assert_equal(len(single_lines), 3)
 
 
-def test_json_multiline():
+def test_json_multiline() raises:
     """Test JSON-like multiline value."""
     var result = dotenv_values("tests/fixtures/multiline.env")
     var json = result["JSON"]
@@ -36,14 +36,14 @@ def test_json_multiline():
     assert_true("value" in json, "JSON should contain 'value'")
 
 
-def test_parsing_continues_after_multiline():
+def test_parsing_continues_after_multiline() raises:
     """Test that parsing continues correctly after multiline values."""
     var result = dotenv_values("tests/fixtures/multiline.env")
     assert_equal(result["AFTER_MULTILINE"], "after_value")
 
 
-def main():
-    from testing import TestSuite
+def main() raises:
+    from std.testing import TestSuite
     var suite = TestSuite()
     suite.test[test_single_line_baseline]()
     suite.test[test_multiline_double_quotes]()

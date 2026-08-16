@@ -11,7 +11,7 @@ All your mojo-* packages contain **pure Mojo source code** with no platform-spec
 
 ### What You're Running Locally
 When you run `./scripts/validate-recipe.sh`, it performs:
-- **Schema validation** - Checks recipe.yaml structure
+- **Schema validation** - Checks `packaging/recipe.yaml` structure
 - **Dependency resolution** - Verifies channels and requirements
 - **Render-only mode** - Doesn't actually compile/build
 
@@ -114,7 +114,7 @@ build:
 ```bash
 docker run -it --rm -v $(pwd):/workspace condaforge/miniforge3:latest bash
 cd /workspace
-./scripts/validate-recipe.sh recipe.yaml
+./scripts/validate-recipe.sh packaging/recipe.yaml
 ```
 
 ### Test on Linux (via GitHub Actions)

@@ -45,7 +45,7 @@ There are two equivalent tasks:
 Both run `python scripts/pre_submit_checklist.py`, which performs:
 
 1. **Tests** – `pixi run test-all` for the full test suite.
-2. **Recipe validation** – `./scripts/validate-recipe.sh recipe.yaml` against the modular-community schema.
+2. **Recipe validation** – `./scripts/validate-recipe.sh packaging/recipe.yaml` against the modular-community schema.
 3. **Package build** – `./scripts/build-recipe.sh`, using `rattler-build` with tests disabled (tests are already covered by `test-all`).
 4. **Git tag check** – ensures a `v<version>` tag exists and matches `HEAD`.
 5. **Install check** – creates a temporary pixi project, adds a file:// channel pointing at `output/`, and verifies that the built package can be installed and that the expected files appear under `.pixi/envs/default/lib/mojo`.

@@ -1,35 +1,34 @@
 """Test helper functions and edge cases."""
 
-from testing import assert_equal, assert_true
+from std.testing import assert_equal, assert_true, TestSuite
 from dotenv import dotenv_values, find_dotenv
-from pathlib import Path
 
 
-def test_backslash_counting():
+def test_backslash_counting() raises:
     """Test backslash counting in multiline parsing."""
     var result = dotenv_values("tests/fixtures/escapes.env")
     assert_true("UNQUOTED" in result, "Should not consume next line")
 
 
-def test_undefined_variables_remain_literal():
+def test_undefined_variables_remain_literal() raises:
     """Test undefined variables remain as literals."""
     var result = dotenv_values("tests/fixtures/variables.env")
     assert_equal(result["UNDEFINED"], "${DOES_NOT_EXIST}")
 
 
-def test_find_dotenv_nonexistent():
+def test_find_dotenv_nonexistent() raises:
     """Test find_dotenv returns empty for non-existent file."""
     var not_found = find_dotenv("nonexistent.env", raise_error_if_not_found=False)
     assert_equal(not_found, "")
 
 
-def test_verbose_mode():
+def test_verbose_mode() raises:
     """Test verbose mode works."""
     var result = dotenv_values("tests/fixtures/basic.env", verbose=True)
     assert_true(len(result) > 0, "Should parse values")
 
 
-def test_keys_without_equals():
+def test_keys_without_equals() raises:
     """Test keys without '=' return empty string."""
     var result = dotenv_values("tests/fixtures/no_equals.env")
     assert_true("JUST_A_KEY" in result, "Should parse standalone key")
@@ -37,7 +36,7 @@ def test_keys_without_equals():
     assert_equal(result["NORMAL_KEY"], "normal_value")
 
 
-def test_empty_file():
+def test_empty_file() raises:
     """Test empty file handling."""
     var empty_path = "/tmp/empty_test.env"
     with open(empty_path, "w") as f:
@@ -47,7 +46,7 @@ def test_empty_file():
     assert_equal(len(result), 0)
 
 
-def test_comments_only_file():
+def test_comments_only_file() raises:
     """Test file with only comments."""
     var comments_path = "/tmp/comments_only.env"
     with open(comments_path, "w") as f:
@@ -60,7 +59,7 @@ def test_comments_only_file():
     assert_equal(len(result), 0)
 
 
-def test_inline_comments_respect_quotes():
+def test_inline_comments_respect_quotes() raises:
     """Test inline comments respect quoted values."""
     var inline_path = "/tmp/inline_test.env"
     with open(inline_path, "w") as f:
@@ -72,8 +71,7 @@ def test_inline_comments_respect_quotes():
     assert_equal(result["UNQUOTED"], "value")
 
 
-def main():
-    from testing import TestSuite
+def main() raises:
     var suite = TestSuite()
     suite.test[test_backslash_counting]()
     suite.test[test_undefined_variables_remain_literal]()
