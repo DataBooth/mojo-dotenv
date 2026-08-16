@@ -1,10 +1,10 @@
 """Simple example using mojo-dotenv."""
 
 from dotenv import dotenv_values, load_dotenv
-from os import getenv
+from std.os import getenv
 
 
-fn main() raises:
+def main() raises:
     print("=" * 60)
     print("mojo-dotenv Example")
     print("=" * 60)

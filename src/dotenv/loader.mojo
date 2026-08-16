@@ -1,11 +1,11 @@
 """Environment variable loading functionality."""
 
-from os import setenv, getenv
-from pathlib import Path
+from std.os import setenv, getenv
+from std.pathlib import Path
 from .parser import parse_dotenv
 
 
-fn load_dotenv(dotenv_path: String, override: Bool = False, verbose: Bool = False) raises -> Bool:
+def load_dotenv(dotenv_path: String, override: Bool = False, verbose: Bool = False) raises -> Bool:
     """Load variables from a .env file into the environment.
 
     Reads a .env file and sets all found variables as environment variables.
@@ -63,7 +63,7 @@ fn load_dotenv(dotenv_path: String, override: Bool = False, verbose: Bool = Fals
         else:
             # Only set if not already in environment
             var existing = getenv(key)
-            if len(existing) == 0:
+            if existing.byte_length() == 0:
                 _ = setenv(key, value)
                 count += 1
             elif verbose:

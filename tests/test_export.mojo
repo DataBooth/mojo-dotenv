@@ -1,10 +1,10 @@
 """Test export prefix support."""
 
-from testing import assert_equal
+from std.testing import assert_equal
 from dotenv import dotenv_values
 
 
-def test_export_prefix():
+def test_export_prefix() raises:
     """Test that export prefix is stripped correctly."""
     var result = dotenv_values("tests/fixtures/export.env")
 
@@ -15,8 +15,8 @@ def test_export_prefix():
     assert_equal(result["KEY5"], "single quotes")
 
 
-def main():
-    from testing import TestSuite
+def main() raises:
+    from std.testing import TestSuite
     var suite = TestSuite()
     suite.test[test_export_prefix]()
     suite^.run()

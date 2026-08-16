@@ -1,11 +1,11 @@
 """Test load_dotenv override parameter functionality."""
 
-from testing import assert_equal
+from std.testing import assert_equal
 from dotenv import load_dotenv
-from os import setenv, getenv, unsetenv
+from std.os import setenv, getenv, unsetenv
 
 
-def test_override_false_preserves_existing():
+def test_override_false_preserves_existing() raises:
     """Test that override=False preserves existing variables."""
     _ = setenv("PORT", "9999")
     _ = setenv("DEBUG", "false")
@@ -15,7 +15,7 @@ def test_override_false_preserves_existing():
     assert_equal(getenv("DEBUG"), "false")
 
 
-def test_override_true_replaces_existing():
+def test_override_true_replaces_existing() raises:
     """Test that override=True replaces existing variables."""
     _ = setenv("PORT", "7777")
     _ = setenv("DEBUG", "maybe")
@@ -25,7 +25,7 @@ def test_override_true_replaces_existing():
     assert_equal(getenv("DEBUG"), "true")
 
 
-def test_new_variables_always_set():
+def test_new_variables_always_set() raises:
     """Test that new variables are set regardless of override."""
     _ = unsetenv("KEY1")
     _ = load_dotenv("tests/fixtures/basic.env", override=False)
@@ -33,7 +33,7 @@ def test_new_variables_always_set():
     assert_equal(getenv("KEY1"), "value1")
 
 
-def test_verbose_mode_with_override_false():
+def test_verbose_mode_with_override_false() raises:
     """Test verbose mode reports skipped variables."""
     _ = setenv("API_KEY", "existing_key")
     _ = load_dotenv("tests/fixtures/basic.env", override=False, verbose=True)
@@ -41,8 +41,8 @@ def test_verbose_mode_with_override_false():
     assert_equal(getenv("API_KEY"), "existing_key")
 
 
-def main():
-    from testing import TestSuite
+def main() raises:
+    from std.testing import TestSuite
     var suite = TestSuite()
     suite.test[test_override_false_preserves_existing]()
     suite.test[test_override_true_replaces_existing]()

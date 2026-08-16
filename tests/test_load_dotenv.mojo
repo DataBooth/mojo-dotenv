@@ -1,11 +1,11 @@
 """Test load_dotenv functionality."""
 
-from testing import assert_equal, assert_true
+from std.testing import assert_equal, assert_true
 from dotenv import load_dotenv
-from os import getenv
+from std.os import getenv
 
 
-def test_load_dotenv_basic():
+def test_load_dotenv_basic() raises:
     """Test loading .env file into environment."""
     var success = load_dotenv("tests/fixtures/basic.env")
     assert_true(success, "Failed to load .env file")
@@ -16,8 +16,8 @@ def test_load_dotenv_basic():
     assert_equal(getenv("PORT"), "8080")
 
 
-def main():
-    from testing import TestSuite
+def main() raises:
+    from std.testing import TestSuite
     var suite = TestSuite()
     suite.test[test_load_dotenv_basic]()
     suite^.run()

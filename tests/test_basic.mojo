@@ -1,10 +1,10 @@
 """Basic tests for mojo-dotenv."""
 
-from testing import assert_equal
+from std.testing import assert_equal
 from dotenv import dotenv_values
 
 
-def test_basic_parsing():
+def test_basic_parsing() raises:
     """Test basic KEY=value parsing."""
     var result = dotenv_values("tests/fixtures/basic.env")
 
@@ -15,7 +15,7 @@ def test_basic_parsing():
     assert_equal(result["PORT"], "8080")
 
 
-def test_quotes():
+def test_quotes() raises:
     """Test quote stripping."""
     var result = dotenv_values("tests/fixtures/quotes.env")
 
@@ -24,7 +24,7 @@ def test_quotes():
     assert_equal(result["MIXED"], 'has "inner" quotes')
 
 
-def test_comments():
+def test_comments() raises:
     """Test comment handling."""
     var result = dotenv_values("tests/fixtures/comments.env")
 
@@ -33,7 +33,7 @@ def test_comments():
     assert_equal(result["KEY3"], "value3")
 
 
-def test_whitespace():
+def test_whitespace() raises:
     """Test whitespace trimming."""
     var result = dotenv_values("tests/fixtures/whitespace.env")
 
@@ -41,8 +41,8 @@ def test_whitespace():
     assert_equal(result["KEY2"], "value2")
 
 
-def main():
-    from testing import TestSuite
+def main() raises:
+    from std.testing import TestSuite
     var suite = TestSuite()
     suite.test[test_basic_parsing]()
     suite.test[test_quotes]()

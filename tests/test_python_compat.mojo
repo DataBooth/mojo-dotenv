@@ -1,11 +1,11 @@
 """Python compatibility tests - compare mojo-dotenv with python-dotenv."""
 
-from testing import assert_equal
+from std.testing import assert_equal
 from dotenv import dotenv_values
-from python import Python, PythonObject
+from std.python import Python, PythonObject
 
 
-fn test_fixture_against_python(fixture_path: String) raises:
+def test_fixture_against_python(fixture_path: String) raises:
     """Test a fixture matches python-dotenv results."""
     var mojo_result = dotenv_values(fixture_path)
     var py = Python.import_module("dotenv")
@@ -29,33 +29,33 @@ fn test_fixture_against_python(fixture_path: String) raises:
                 pass
 
 
-def test_basic_fixture():
+def test_basic_fixture() raises:
     """Test basic.env matches python-dotenv."""
     test_fixture_against_python("tests/fixtures/basic.env")
 
 
-def test_quotes_fixture():
+def test_quotes_fixture() raises:
     """Test quotes.env matches python-dotenv."""
     test_fixture_against_python("tests/fixtures/quotes.env")
 
 
-def test_comments_fixture():
+def test_comments_fixture() raises:
     """Test comments.env matches python-dotenv."""
     test_fixture_against_python("tests/fixtures/comments.env")
 
 
-def test_whitespace_fixture():
+def test_whitespace_fixture() raises:
     """Test whitespace.env matches python-dotenv."""
     test_fixture_against_python("tests/fixtures/whitespace.env")
 
 
-def test_edge_cases_fixture():
+def test_edge_cases_fixture() raises:
     """Test edge_cases.env matches python-dotenv."""
     test_fixture_against_python("tests/fixtures/edge_cases.env")
 
 
-def main():
-    from testing import TestSuite
+def main() raises:
+    from std.testing import TestSuite
     var suite = TestSuite()
     suite.test[test_basic_fixture]()
     suite.test[test_quotes_fixture]()

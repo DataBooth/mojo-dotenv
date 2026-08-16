@@ -4,10 +4,10 @@ This module provides functions to parse .env file lines and extract key-value pa
 """
 
 from std.collections import Dict, List, Optional
-from os import getenv
+from std.os import getenv
 
 
-fn to_chars(text: String) -> List[String]:
+def to_chars(text: String) -> List[String]:
     """Convert a String into a list of single-codepoint Strings."""
     var chars = List[String]()
     for slice in text.codepoint_slices():
@@ -15,7 +15,7 @@ fn to_chars(text: String) -> List[String]:
     return chars^
 
 
-fn join_chars(chars: List[String], start: Int, end: Int) -> String:
+def join_chars(chars: List[String], start: Int, end: Int) -> String:
     """Join a slice of character list [start, end) into a String."""
     var result = String("")
     var i = start
@@ -25,7 +25,7 @@ fn join_chars(chars: List[String], start: Int, end: Int) -> String:
     return result
 
 
-fn count_trailing_backslashes(text: String, end_pos: Int) -> Int:
+def count_trailing_backslashes(text: String, end_pos: Int) -> Int:
     """Count consecutive backslashes before the given character position.
 
     Args:
@@ -44,7 +44,7 @@ fn count_trailing_backslashes(text: String, end_pos: Int) -> Int:
     return count
 
 
-fn lookup_variable(var_name: String, env_dict: Dict[String, String], fallback_literal: String) raises -> String:
+def lookup_variable(var_name: String, env_dict: Dict[String, String], fallback_literal: String) raises -> String:
     """Look up a variable in env_dict, then system environment, else return literal.
 
     Args:
@@ -59,13 +59,13 @@ fn lookup_variable(var_name: String, env_dict: Dict[String, String], fallback_li
         return env_dict[var_name]
 
     var sys_val = getenv(var_name)
-    if len(sys_val) > 0:
+    if sys_val.byte_length() > 0:
         return sys_val
 
     return fallback_literal
 
 
-fn strip_inline_comment(line: String) -> String:
+def strip_inline_comment(line: String) -> String:
     """Strip inline comments from a line.
 
     Handles # comments after values, but not within quotes.
@@ -109,7 +109,7 @@ fn strip_inline_comment(line: String) -> String:
     return line
 
 
-fn expand_variables(value: String, env_dict: Dict[String, String]) raises -> String:
+def expand_variables(value: String, env_dict: Dict[String, String]) raises -> String:
     """Expand variable references in a value.
 
     Supports:
@@ -182,7 +182,7 @@ fn expand_variables(value: String, env_dict: Dict[String, String]) raises -> Str
     return result
 
 
-fn process_escapes(value: String) -> String:
+def process_escapes(value: String) -> String:
     """Process escape sequences in a string.
 
     Handles:
@@ -233,7 +233,7 @@ fn process_escapes(value: String) -> String:
     return result
 
 
-fn strip_quotes(value: String) -> String:
+def strip_quotes(value: String) -> String:
     """Strip outer quotes (single or double) from a value and process escapes.
 
     Args:
@@ -261,7 +261,7 @@ fn strip_quotes(value: String) -> String:
     return v_str
 
 
-fn parse_line(line: String, verbose: Bool = False) -> Optional[Tuple[String, String]]:
+def parse_line(line: String, verbose: Bool = False) -> Optional[Tuple[String, String]]:
     """Parse a single line from a .env file.
 
     Handles:
@@ -283,7 +283,7 @@ fn parse_line(line: String, verbose: Bool = False) -> Optional[Tuple[String, Str
     var stripped = String(line.strip())
 
     # Ignore empty lines
-    if len(stripped) == 0:
+    if stripped.byte_length() == 0:
         return None
 
     # Ignore full-line comments
@@ -295,7 +295,7 @@ fn parse_line(line: String, verbose: Bool = False) -> Optional[Tuple[String, Str
 
     # Strip 'export ' prefix if present
     if stripped.startswith("export "):
-        stripped = String(String(stripped[7:]).strip())
+        stripped = String(String(stripped[byte=7:]).strip())
 
     # Split on first '=' only
     var parts = stripped.split("=", 1)
@@ -304,7 +304,7 @@ fn parse_line(line: String, verbose: Bool = False) -> Optional[Tuple[String, Str
     if len(parts) != 2:
         # python-dotenv treats this as key with None value
         # We'll use empty string (Mojo Dict doesn't support None values easily)
-        if len(parts) == 1 and len(parts[0].strip()) > 0:
+        if len(parts) == 1 and String(parts[0].strip()).byte_length() > 0:
             var key = String(parts[0].strip())
             if verbose:
                 print("[dotenv] Key without value: " + key + " (using empty string)")
@@ -318,13 +318,13 @@ fn parse_line(line: String, verbose: Bool = False) -> Optional[Tuple[String, Str
     value = strip_quotes(value)
 
     # Empty key is invalid
-    if len(key) == 0:
+    if key.byte_length() == 0:
         return None
 
     return (key, value)
 
 
-fn parse_dotenv(content: String, verbose: Bool = False) raises -> Dict[String, String]:
+def parse_dotenv(content: String, verbose: Bool = False) raises -> Dict[String, String]:
     """Parse the entire content of a .env file.
 
     Performs two passes:
@@ -348,10 +348,10 @@ fn parse_dotenv(content: String, verbose: Bool = False) raises -> Dict[String, S
 
         # Check if line starts a quoted value that may span multiple lines
         var stripped = String(line.strip())
-        if len(stripped) > 0 and not stripped.startswith("#"):
+        if stripped.byte_length() > 0 and not stripped.startswith("#"):
             # Strip export prefix if present
             if stripped.startswith("export "):
-                stripped = String(String(stripped[7:]).strip())
+                stripped = String(String(stripped[byte=7:]).strip())
 
             # Check for KEY= pattern
             var parts = stripped.split("=", 1)
